@@ -1,0 +1,114 @@
+[ +279 ms] executing: [C:\src\flutter\] git -c log.showSignature=false log -n 1 --pretty=format:%H
+[ +453 ms] Exit code 0 from: git -c log.showSignature=false log -n 1 --pretty=format:%H
+[        ] 0b8abb4724aa590dd0f429683339b1e045a1594d
+[        ] executing: [C:\src\flutter\] git describe --match v*.*.* --first-parent --long --tags
+[ +379 ms] Exit code 0 from: git describe --match v*.*.* --first-parent --long --tags
+[        ] v1.12.13+hotfix.8-0-g0b8abb472
+[  +19 ms] executing: [C:\src\flutter\] git rev-parse --abbrev-ref --symbolic @{u}
+[ +357 ms] Exit code 0 from: git rev-parse --abbrev-ref --symbolic @{u}
+[        ] origin/stable
+[        ] executing: [C:\src\flutter\] git ls-remote --get-url origin
+[ +303 ms] Exit code 0 from: git ls-remote --get-url origin
+[   +1 ms] https://github.com/flutter/flutter.git
+[ +524 ms] executing: [C:\src\flutter\] git rev-parse --abbrev-ref HEAD
+[ +266 ms] Exit code 0 from: git rev-parse --abbrev-ref HEAD
+[        ] stable
+[ +715 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe devices -l
+[ +128 ms] Exit code 0 from: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe devices -l
+[        ] List of devices attached
+           emulator-5554          device product:sdk_gphone_x86_arm model:AOSP_on_IA_Emulator device:generic_x86_arm
+[  +80 ms] C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell getprop
+[ +591 ms] Artifact Instance of 'AndroidMavenArtifacts' is not required, skipping update.
+[  +20 ms] Artifact Instance of 'AndroidInternalBuildArtifacts' is not required, skipping update.
+[   +1 ms] Artifact Instance of 'IOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterWebSdk' is not required, skipping update.
+[  +25 ms] Artifact Instance of 'WindowsEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxEngineArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'LinuxFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'MacOSFuchsiaSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerSDKArtifacts' is not required, skipping update.
+[        ] Artifact Instance of 'FlutterRunnerDebugSymbols' is not required, skipping update.
+[ +291 ms] Found plugin audioplayers at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\audioplayers-0.14.2\
+[ +239 ms] Found plugin path_provider at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\path_provider-1.6.5\
+[   +4 ms] Found plugin path_provider_macos at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\path_provider_macos-0.0.4\
+[ +313 ms] Found plugin audioplayers at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\audioplayers-0.14.2\
+[ +189 ms] Found plugin path_provider at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\path_provider-1.6.5\
+[   +5 ms] Found plugin path_provider_macos at C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\path_provider_macos-0.0.4\
+[ +407 ms] Generating C:\Users\gonzalez\Projects\little_fme\android\app\src\main\java\io\flutter\plugins\GeneratedPluginRegistrant.java
+[ +285 ms] ro.hardware = ranchu
+[ +345 ms] Using hardware rendering with device AOSP on IA Emulator. If you get graphics artifacts, consider enabling software rendering with "--enable-software-rendering".
+[ +129 ms] Launching lib\main.dart on AOSP on IA Emulator in debug mode...
+[ +104 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\build-tools\28.0.3\aapt dump xmltree C:\Users\gonzalez\Projects\little_fme\build\app\outputs\apk\app.apk AndroidManifest.xml
+[  +92 ms] Exit code 0 from: C:\Users\gonzalez\AppData\Local\Android\sdk\build-tools\28.0.3\aapt dump xmltree C:\Users\gonzalez\Projects\little_fme\build\app\outputs\apk\app.apk AndroidManifest.xml
+[        ] N: android=http://schemas.android.com/apk/res/android
+             E: manifest (line=2)
+               A: android:versionCode(0x0101021b)=(type 0x10)0x1
+               A: android:versionName(0x0101021c)="1.0.0" (Raw: "1.0.0")
+               A: android:compileSdkVersion(0x01010572)=(type 0x10)0x1c
+               A: android:compileSdkVersionCodename(0x01010573)="9" (Raw: "9")
+               A: package="com.fme.little_fme" (Raw: "com.fme.little_fme")
+               A: platformBuildVersionCode=(type 0x10)0x1c
+               A: platformBuildVersionName=(type 0x10)0x9
+               E: uses-sdk (line=7)
+                 A: android:minSdkVersion(0x0101020c)=(type 0x10)0x10
+                 A: android:targetSdkVersion(0x01010270)=(type 0x10)0x1c
+               E: uses-permission (line=14)
+                 A: android:name(0x01010003)="android.permission.INTERNET" (Raw: "android.permission.INTERNET")
+               E: application (line=22)
+                 A: android:label(0x01010001)="little_fme" (Raw: "little_fme")
+                 A: android:icon(0x01010002)=@0x7f080000
+                 A: android:name(0x01010003)="io.flutter.app.FlutterApplication" (Raw: "io.flutter.app.FlutterApplication")
+                 A: android:debuggable(0x0101000f)=(type 0x12)0xffffffff
+                 A: android:appComponentFactory(0x0101057a)="androidx.core.app.CoreComponentFactory" (Raw: "androidx.core.app.CoreComponentFactory")
+                 E: activity (line=28)
+                   A: android:theme(0x01010000)=@0x7f0a0000
+                   A: android:name(0x01010003)="com.fme.little_fme.MainActivity" (Raw: "com.fme.little_fme.MainActivity")
+                   A: android:launchMode(0x0101001d)=(type 0x10)0x1
+                   A: android:configChanges(0x0101001f)=(type 0x11)0x40003fb4
+                   A: android:windowSoftInputMode(0x0101022b)=(type 0x11)0x10
+                   A: android:hardwareAccelerated(0x010102d3)=(type 0x12)0xffffffff
+                   E: intent-filter (line=35)
+                     E: action (line=36)
+                       A: android:name(0x01010003)="android.intent.action.MAIN" (Raw: "android.intent.action.MAIN")
+                     E: category (line=38)
+                       A: android:name(0x01010003)="android.intent.category.LAUNCHER" (Raw: "android.intent.category.LAUNCHER")
+                 E: meta-data (line=45)
+                   A: android:name(0x01010003)="flutterEmbedding" (Raw: "flutterEmbedding")
+                   A: android:value(0x01010024)=(type 0x10)0x2
+[  +18 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell -x logcat -v time -t 1
+[ +454 ms] Exit code 0 from: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell -x logcat -v time -t 1
+[        ] --------- beginning of main
+           03-30 17:09:07.471 I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[  +17 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe version
+[   +2 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 logcat -v time -T 03-30 17:09:07.471
+[ +328 ms] Android Debug Bridge version 1.0.39
+           Revision 3db08f2c6889-android
+           Installed as C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe
+[   +9 ms] executing: C:\Users\gonzalez\AppData\Local\Android\sdk\platform-tools\adb.exe start-server
+[ +337 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[        ] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[   +2 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[        ] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[  +11 ms] Building APK
+[ +125 ms] Running Gradle task 'assembleDebug'...
+[   +6 ms] gradle.properties already sets `android.enableR8`
+[  +26 ms] Using gradle from C:\Users\gonzalez\Projects\little_fme\android\gradlew.bat.
+[  +65 ms] executing: C:\Program Files\Android\Android Studio\jre\bin\java -version
+[+1042 ms] Exit code 0 from: C:\Program Files\Android\Android Studio\jre\bin\java -version
+[        ] openjdk version "1.8.0_152-release"
+           OpenJDK Runtime Environment (build 1.8.0_152-release-915-b01)
+           OpenJDK 64-Bit Server VM (build 25.152-b01, mixed mode)
+[  +11 ms] executing: [C:\Users\gonzalez\Projects\little_fme\android\] C:\Users\gonzalez\Projects\little_fme\android\gradlew.bat -Pverbose=true -Ptarget=C:\Users\gonzalez\Projects\little_fme\lib\main.dart -Ptrack-widget-creation=true -Pfilesystem-scheme=org-dartlang-root -Ptarget-platform=android-x86 assembleDebug
+[   +2 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[   +8 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[        ] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[ +185 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[  +31 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[ +883 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[ +169 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[+1210 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[  +43 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[ +627 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+[ +170 ms] I/flutter (14097): Another exception was thrown: type 'List<ElementInstance>' is not a subtype of type 'List<ElementInstance>' of 'function result' where
+¨Desea terminar el trabajo por lotes (S/N)? 
