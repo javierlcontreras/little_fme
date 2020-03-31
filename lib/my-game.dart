@@ -69,7 +69,7 @@ class MyGame extends Game {
   }
 
   void afegirDades() {
-    MyElement ivet = MyElement("ivet", "Ivet Acosta", "");
+    MyElement ivet = MyElement("ivet", "Ivet Acosta", "Super Ivet Superbe Superbe");
     MyElement javier = MyElement("javier", "Javier LC", "");
     MyElement maria = MyElement("maria", "Maria Prat", "");
     MyElement laura = MyElement("laura", "Laura Arribas", "");
@@ -82,6 +82,8 @@ class MyGame extends Game {
     elements["maria"] = maria;
     elements["laura"] = laura;
     recipes["anna-erik"] = Recipe("endogamia", anna, erik, ivet);
+    recipes["javier-maria"] = Recipe("endogamia2", javier, maria, ivet);
+    recipes["laura-laura"] = Recipe("endogamiaWow", laura, laura, ivet);
     descoberts.add("anna");
     descoberts.add("erik");
     descoberts.add("javier");
@@ -230,8 +232,88 @@ class MyGame extends Game {
       tp.layout();
       tp.paint(canvas, new Offset(3*pad, 6*pad + bigtile + 4*pad));
 
-      if (detailsShow.A != null) print("sdfn");
+      if (detailsShow.A != null) {
+        showRecipe(bigtile + 12*pad, detailsShow.A, canvas);
+      }
+      if (detailsShow.B != null) {
+        showRecipe(bigtile + 13.5*pad + recipetile, detailsShow.B, canvas);
+      }
+      if (detailsShow.C != null) {
+        showRecipe(bigtile + 15*pad + 2*recipetile, detailsShow.C, canvas);
+      }
     }
+  }
+
+  void showRecipe(double y, Recipe A, Canvas canvas) {
+    Rect bgRect = Rect.fromLTWH(
+      3*pad,
+      y,
+      recipetile,
+      recipetile,
+    );
+    TextSpan span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.m1.name);
+    TextPainter tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(3*pad, y + recipetile + pad/2));
+
+    double xplus = (3*pad + screenSize.width/2 - recipetile/2)/2 + recipetile/2;
+    span = new TextSpan(
+        style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
+        text: "+");
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(xplus - 3*pad/4, y + recipetile/2 - pad));
+
+
+    A.m1.img.renderRect(canvas, bgRect);
+    bgRect = Rect.fromLTWH(
+      screenSize.width/2 - recipetile/2,
+      y,
+      recipetile,
+      recipetile,
+    );
+    A.m2.img.renderRect(canvas, bgRect);
+    span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.m2.name);
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(screenSize.width/2 - recipetile/2, y + recipetile + pad/2));
+
+    double xeq = (screenSize.width - recipetile - 3*pad + screenSize.width/2 - recipetile/2)/2 + recipetile/2;
+    span = new TextSpan(
+        style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
+        text: "=");
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(xeq - pad, y + recipetile/2 - pad));
+
+    bgRect = Rect.fromLTWH(
+      screenSize.width - recipetile - 3*pad,
+      y,
+      recipetile,
+      recipetile,
+    );
+    A.p.img.renderRect(canvas, bgRect);
+    span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.p.name);
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(screenSize.width - recipetile - 3*pad, y + recipetile + pad/2));
+
   }
 
   void resize(Size size) {
