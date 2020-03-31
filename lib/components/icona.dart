@@ -38,10 +38,6 @@ class Icona {
     tp.paint(canvas, new Offset(x - game.tile/2, y + game.tile/2 + game.pad / 2));
   }
 
-  void update(double t) {
-
-  }
-
   void move(double _x, double _y) {
     x = _x;
     y = _y;
