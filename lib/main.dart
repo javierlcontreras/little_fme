@@ -29,6 +29,7 @@ main() async {
   PanGestureRecognizer dragger = PanGestureRecognizer();
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;
+  tapper.onTapUp = game.onTapUp;
   dragger.onStart = game.onPanStart;
   dragger.onUpdate = game.onPanUpdate;
   dragger.onEnd = game.onPanEnd;

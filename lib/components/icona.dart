@@ -4,6 +4,8 @@ import 'package:little_fme/my-game.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 
+import 'package:flutter/material.dart';
+
 class Icona {
   final MyGame game;
 
@@ -25,6 +27,15 @@ class Icona {
       game.tile,
     );
     el.img.renderRect(canvas, bgRect);
+
+    TextSpan span = new TextSpan(
+        style: new TextStyle(fontSize: game.pad / 2, color: Color(0xffeeeeee)),
+        text: el.name);
+    TextPainter tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(x - game.tile/2, y + game.tile/2 + game.pad / 2));
   }
 
   void update(double t) {
