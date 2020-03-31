@@ -24,9 +24,7 @@ class MyGame extends Game {
   double scrollMax = 0;
   double startY, endY;
 
-  Offset lastTap;
-
-  String pantalla; //mix, add, elem
+  String pantalla; //mix, add, details
 
   Map<String, MyElement> elements;
   Map<String, Recipe> recipes;
@@ -60,6 +58,12 @@ class MyGame extends Game {
     iconas = Set<Icona>();
     descoberts = OrderedSet<String>();
 
+    afegirDades();
+
+    recalcPosDescoberts();
+  }
+
+  void afegirDades() {
     MyElement ivet = MyElement("ivet", "Ivet Acosta", "");
     MyElement javier = MyElement("javier", "Javier LC", "");
     MyElement maria = MyElement("maria", "Maria Prat", "");
@@ -72,7 +76,6 @@ class MyGame extends Game {
     elements["javier"] = javier;
     elements["maria"] = maria;
     elements["laura"] = laura;
-
     recipes["anna-erik"] = Recipe("endogamia", anna, erik, ivet);
     descoberts.add("anna");
     descoberts.add("erik");
@@ -80,6 +83,19 @@ class MyGame extends Game {
     descoberts.add("javier");
     descoberts.add("maria");
     descoberts.add("laura");
+  }
+
+  void recalcPosDescoberts() {
+    double mx = 2*pad, my = startY;
+    descoberts?.forEach((String nom) {
+      elements[nom].x = mx;
+      elements[nom].y = my;
+      mx += smalltile + pad;
+      if (mx > screenSize.width - 2*pad) {
+        mx = 2*pad;
+        my += smalltile + 2*pad;
+      }
+    });
   }
 
   void render(Canvas canvas) {
@@ -190,24 +206,12 @@ class MyGame extends Game {
     }
   }
 
-  void update(double t) {
-    iconas?.forEach((Icona ic) => ic.update(t));
-
-    double mx = 2*pad, my = startY;
-    descoberts?.forEach((String nom) {
-      elements[nom].x = mx;
-      elements[nom].y = my;
-      mx += smalltile + pad;
-      if (mx > screenSize.width - 2*pad) {
-        mx = 2*pad;
-        my += smalltile + 2*pad;
-      }
-    });
-  }
-
   void resize(Size size) {
     screenSize = size;
-    super.resize(size);
+  }
+
+  void update(double t) {
+
   }
 
   double dist(double x1, double y1, double x2, double y2) {
@@ -296,13 +300,19 @@ class MyGame extends Game {
       String P2 = best.el.id + "-" + holding.el.id;
       if (recipes.containsKey(P1)) {
         iconas.add(Icona(this, best.x, best.y, recipes[P1].p));
-        if (!descoberts.contains(recipes[P1].p.id)) descoberts.add(recipes[P1].p.id);
+        if (!descoberts.contains(recipes[P1].p.id)) {
+          descoberts.add(recipes[P1].p.id);
+          recalcPosDescoberts();
+        }
         iconas.remove(holding);
         iconas.remove(best);
       }
       else if (recipes.containsKey(P2)) {
         iconas.add(Icona(this, best.x, best.y, recipes[P2].p));
-        if (!descoberts.contains(recipes[P2].p.id)) descoberts.add(recipes[P2].p.id);
+        if (!descoberts.contains(recipes[P2].p.id)) {
+          descoberts.add(recipes[P2].p.id);
+          recalcPosDescoberts();
+        }
         iconas.remove(holding);
         iconas.remove(best);
       }
@@ -314,7 +324,6 @@ class MyGame extends Game {
   }
 
   void onTapDown(TapDownDetails d) {
-    lastTap = d.globalPosition;
     double x = d.globalPosition.dx;
     double y = d.globalPosition.dy;
 

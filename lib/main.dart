@@ -19,12 +19,6 @@ main() async {
   flameUtil.fullScreen();
   flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-  Flame.images.loadAll(<String>[
-    'anna.png',
-    'ivet.png',
-    'erik.png',
-  ]);
-
   MyGame game = MyGame();
   PanGestureRecognizer dragger = PanGestureRecognizer();
   TapGestureRecognizer tapper = TapGestureRecognizer();
@@ -33,7 +27,9 @@ main() async {
   dragger.onStart = game.onPanStart;
   dragger.onUpdate = game.onPanUpdate;
   dragger.onEnd = game.onPanEnd;
+
   runApp(game.widget);
+
   flameUtil.addGestureRecognizer(dragger);
   flameUtil.addGestureRecognizer(tapper);
 }
