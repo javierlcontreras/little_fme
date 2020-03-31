@@ -15,10 +15,11 @@ class MyGame extends Game {
   Size screenSize;
 
   int n;
-  double tile, smalltile, bigtile;
+  double tile, smalltile, bigtile, recipetile;
   double pad;
 
   double scroll;
+  double scrollDetails;
   double scrollInit;
   double scrollLast;
   double scrollMax = 0;
@@ -40,15 +41,19 @@ class MyGame extends Game {
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
+
     tile = screenSize.width/8;
     n = 5;
     pad = tile/3;
     smalltile = (screenSize.width - (n+3)*pad)/n;
     bigtile = screenSize.height/2 - 8*pad;
+    recipetile = (screenSize.height - bigtile - 13*pad - 4*pad)/3;
+
     startY = 6*pad;
     endY = screenSize.height;
     scrollInit = -1;
     scroll = 0;
+    scrollDetails = 0;
     scrollLast = 0;
 
     pantalla = "mix";
@@ -79,7 +84,6 @@ class MyGame extends Game {
     recipes["anna-erik"] = Recipe("endogamia", anna, erik, ivet);
     descoberts.add("anna");
     descoberts.add("erik");
-    descoberts.add("ivet");
     descoberts.add("javier");
     descoberts.add("maria");
     descoberts.add("laura");
@@ -96,6 +100,29 @@ class MyGame extends Game {
         my += smalltile + 2*pad;
       }
     });
+  }
+
+  void discoverRecipe(Recipe S) {
+    MyElement prod = S.p;
+
+    if (prod.A == null) {
+      prod.A = S;
+      return;
+    }
+    else if (prod.A == S) return;
+
+    if (prod.B == null) {
+      prod.B = S;
+      return;
+    }
+    else if (prod.B == S) return;
+
+    if (prod.C == null) {
+      prod.C = S;
+      return;
+    }
+    else if (prod.C == S) return;
+
   }
 
   void render(Canvas canvas) {
@@ -142,7 +169,7 @@ class MyGame extends Game {
 
       canvas.drawCircle(
           Offset(screenSize.width - 3 * pad, 3 * pad),
-          pad, _black);
+          pad-1, _black);
 
       descoberts?.forEach((String nom) {
         double mx = elements[nom].x;
@@ -169,40 +196,41 @@ class MyGame extends Game {
     }
     if (pantalla == "details") {
       Rect bgRect = Rect.fromLTWH(
-          2*pad, screenSize.height/4, screenSize.width - 4 * pad, screenSize.height/2);
+          2*pad, 2*pad, screenSize.width - 4 * pad, screenSize.height - 2 * pad);
       Paint bgPaint = Paint();
       bgPaint.color = Color(0xffeeeeee);
       canvas.drawRect(bgRect, bgPaint);
 
       canvas.drawCircle(
-          Offset(screenSize.width - 4 * pad, screenSize.height/4 + 2*pad),
-          pad, _black);
+          Offset(screenSize.width - 4 * pad, 4*pad),
+          pad-1, _black);
 
       bgRect = Rect.fromLTWH(
         screenSize.width/2 - bigtile/2,
-        screenSize.height/2 - bigtile/2,
+        6*pad,
         bigtile,
         bigtile,
       );
       detailsShow.img.renderRect(canvas, bgRect);
       TextSpan span = new TextSpan(
-          style: new TextStyle(fontSize: pad, color: Color(0xff000000)),
+          style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
           text: detailsShow.name);
       TextPainter tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);
       tp.layout();
-      tp.paint(canvas, new Offset(3*pad, screenSize.height/2 + bigtile/2 + pad));
+      tp.paint(canvas, new Offset(3*pad, 6*pad + bigtile + 1*pad));
 
       span = new TextSpan(
-          style: new TextStyle(fontSize: 4*pad/5, color: Color(0xff000000)),
+          style: new TextStyle(fontSize: pad, color: Color(0xff000000)),
           text: detailsShow.desc);
       tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);
       tp.layout();
-      tp.paint(canvas, new Offset(3*pad, screenSize.height/2 + bigtile/2 + 2.5*pad));
+      tp.paint(canvas, new Offset(3*pad, 6*pad + bigtile + 4*pad));
 
+      if (detailsShow.A != null) print("sdfn");
     }
   }
 
@@ -299,6 +327,8 @@ class MyGame extends Game {
       String P1 = holding.el.id + "-" + best.el.id;
       String P2 = best.el.id + "-" + holding.el.id;
       if (recipes.containsKey(P1)) {
+        discoverRecipe(recipes[P1]);
+
         iconas.add(Icona(this, best.x, best.y, recipes[P1].p));
         if (!descoberts.contains(recipes[P1].p.id)) {
           descoberts.add(recipes[P1].p.id);
@@ -308,6 +338,8 @@ class MyGame extends Game {
         iconas.remove(best);
       }
       else if (recipes.containsKey(P2)) {
+        discoverRecipe(recipes[P2]);
+
         iconas.add(Icona(this, best.x, best.y, recipes[P2].p));
         if (!descoberts.contains(recipes[P2].p.id)) {
           descoberts.add(recipes[P2].p.id);
@@ -343,10 +375,7 @@ class MyGame extends Game {
     }
     else if (pantalla == "details") {
       if (dist(x, y,
-          screenSize.width - 4 * pad,
-          screenSize.height/4 + 2*pad) < tile ||
-          y < screenSize.height/4  ||
-          y > 3*screenSize.height/4) {
+          screenSize.width - 4 * pad, 4*pad) < tile) {
         pantalla = "add";
       }
     }
