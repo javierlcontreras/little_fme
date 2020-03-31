@@ -12,6 +12,9 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components/component.dart';
 
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
