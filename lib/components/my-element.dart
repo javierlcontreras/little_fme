@@ -66,7 +66,7 @@ class MyElement {
       TextPainter tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);
-      tp.layout();
+      tp.layout(minWidth: game.smalltile);
       tp.paint(canvas, new Offset(x, my + game.smalltile + game.pad / 2));
     }
   }

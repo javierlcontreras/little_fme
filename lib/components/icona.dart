@@ -50,7 +50,7 @@ class Icona {
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
-    tp.layout();
+    tp.layout(minWidth: game.tile);
     tp.paint(canvas, new Offset(x - game.tile/2, y + game.tile/2 + game.pad / 2));
   }
 

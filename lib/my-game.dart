@@ -70,7 +70,7 @@ class MyGame extends Game {
     recipetile = (screenSize.height - bigtile - 13*pad - 4*pad)/3;
 
     startY = pad;
-    endY = screenSize.height;
+    endY = screenSize.height - pad;
     scrollInit = -1;
     scroll = 0;
     scrollDetails = 0;
@@ -88,7 +88,7 @@ class MyGame extends Game {
 
     descoberts = new SplayTreeSet<String>();
     descobertsRecipes = new SplayTreeSet<String>();
-    // TODO uncomment reads to not reestart game every time
+    // TODO uncomment reads to not restart game every time
     readDescoberts();
     readDescobertsRecipes();
 

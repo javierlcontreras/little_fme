@@ -51,7 +51,7 @@ class Recipe {
     TextPainter tp = new TextPainter(
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
-    tp.layout();
+    tp.layout(minWidth: game.recipetile);
     tp.paint(canvas, new Offset(3*game.pad, y + game.recipetile + game.pad/2));
   
     double xplus = (3*game.pad + game.screenSize.width/2 - game.recipetile/2)/2 + game.recipetile/2;
@@ -78,7 +78,7 @@ class Recipe {
     tp = new TextPainter(
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
-    tp.layout();
+    tp.layout(minWidth: game.recipetile);
     tp.paint(canvas, new Offset(game.screenSize.width/2 - game.recipetile/2,
               y + game.recipetile + game.pad/2));
   
@@ -106,7 +106,7 @@ class Recipe {
     tp = new TextPainter(
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
-    tp.layout();
+    tp.layout(minWidth: game.recipetile);
     tp.paint(canvas, new Offset(game.screenSize.width - game.recipetile - 3*game.pad,
                 y + game.recipetile + game.pad/2));
   }

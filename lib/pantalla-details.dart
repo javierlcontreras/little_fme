@@ -34,7 +34,7 @@ class PantallaDetails {
       ..strokeWidth = 2;
 
     Rect bgRect = Rect.fromLTWH(
-        2*game.pad, 2*game.pad, game.screenSize.width - 4 * game.pad, game.screenSize.height - 2 * game.pad);
+        2*game.pad, 2*game.pad, game.screenSize.width - 4 * game.pad, game.screenSize.height - 4 * game.pad);
     Paint bgPaint = Paint();
     bgPaint.color = Color(0xffeeeeee);
     canvas.drawRect(bgRect, bgPaint);
@@ -56,16 +56,18 @@ class PantallaDetails {
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
-    tp.layout();
-    tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 1*game.pad));
+    tp.layout(minWidth: game.screenSize.width - 4 * game.pad);
+    tp.paint(canvas, new Offset(2*game.pad, 6*game.pad + game.bigtile + 1*game.pad));
+
 
     span = new TextSpan(
         style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
         text: game.detailsShow.desc);
     tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr);
-    tp.layout();
+        textDirection: TextDirection.ltr,
+        maxLines: 10);
+    tp.layout(minWidth: game.screenSize.width - 6 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
     tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 4*game.pad));
 
     if (game.detailsShow.A != null) {

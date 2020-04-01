@@ -33,7 +33,7 @@ class PantallaAdd {
     });
   */
     Rect bgRect = Rect.fromLTWH(
-        game.pad, game.pad, game.screenSize.width - 2 * game.pad, game.screenSize.height - game.pad);
+        game.pad, game.pad, game.screenSize.width - 2 * game.pad, game.screenSize.height - 2*game.pad);
     Paint bgPaint = Paint();
     bgPaint.color = Color(0xffffffff);
     canvas.drawRect(bgRect, bgPaint);
