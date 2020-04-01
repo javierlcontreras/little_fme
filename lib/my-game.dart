@@ -254,20 +254,6 @@ class MyGame extends Game {
     }
   }
   void onTapDown(TapDownDetails d) {
-    double x = d.globalPosition.dx;
-    double y = d.globalPosition.dy;
-
-    if (pantalla == "add") {
-      if (dist(x, y, screenSize.width - 3*pad, 3*pad) < tile) {
-        pantalla = "mix";
-      }
-    }
-    else if (pantalla == "details") {
-      if (dist(x, y,
-          screenSize.width - 4 * pad, 4*pad) < tile) {
-        pantalla = "add";
-      }
-    }
   }
   void onTapUp(TapUpDetails d) {
     double x = d.globalPosition.dx;
@@ -282,6 +268,11 @@ class MyGame extends Game {
       }
     }
     else if (pantalla == "add") {
+      if (dist(x, y, screenSize.width - 3*pad, 3*pad) < tile) {
+        pantalla = "mix";
+        return;
+      }
+
       double r = 1e9;
       String willHold = "";
       descoberts?.forEach((String nom) {
@@ -299,6 +290,13 @@ class MyGame extends Game {
         detailsShow = elements[willHold];
       }
     }
+    else if (pantalla == "details") {
+      if (dist(x, y,
+          screenSize.width - 4 * pad, 4*pad) < tile) {
+        pantalla = "add";
+      }
+    }
+
   }
 
   // USELESS
