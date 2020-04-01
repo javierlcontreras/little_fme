@@ -1,10 +1,26 @@
 import 'dart:ui';
+import 'dart:math';
+import 'dart:collection';
+import 'dart:io';
 
 import 'package:little_fme/my-game.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/sprite.dart';
+import 'package:little_fme/pantalla-mix.dart';
+import 'package:little_fme/pantalla-add.dart';
+import 'package:little_fme/pantalla-details.dart';
+import 'package:little_fme/components/icona.dart';
+import 'package:little_fme/components/my-element.dart';
+import 'package:little_fme/components/recipe.dart';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame/flame.dart';
+
+import 'package:path_provider/path_provider.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Icona {
   final MyGame game;
@@ -43,38 +59,3 @@ class Icona {
     y = _y;
   }
 }
-
-class MyElement {
-  String id;
-  String name;
-  String desc;
-  Sprite img;
-
-  double x;
-  double y;
-
-  Recipe A;
-  Recipe B;
-  Recipe C;
-
-  MyElement(String _id, String _name, String _desc) {
-    id = _id;
-    img = Sprite(id + '.png');
-    name = _name;
-    desc = _desc;
-  }
-}
-
-class Recipe {
-  String id;
-  MyElement m1, m2;
-  MyElement p;
-
-  Recipe(String _id, MyElement _m1, MyElement _m2, MyElement _p) {
-    id = _id;
-    m1 = _m1;
-    m2 = _m2;
-    p = _p;
-  }
-}
-
