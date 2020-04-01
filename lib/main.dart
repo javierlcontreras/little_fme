@@ -11,9 +11,7 @@ import 'package:flame/util.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components/component.dart';
-
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +20,9 @@ main() async {
   flameUtil.fullScreen();
   flameUtil.setOrientation(DeviceOrientation.portraitUp);
 
-  MyGame game = MyGame();
+  SharedPreferences storage = await SharedPreferences.getInstance();
+
+  MyGame game = MyGame(storage);
   PanGestureRecognizer dragger = PanGestureRecognizer();
   TapGestureRecognizer tapper = TapGestureRecognizer();
   tapper.onTapDown = game.onTapDown;

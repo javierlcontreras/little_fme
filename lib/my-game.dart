@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:math';
-import 'package:ordered_set/ordered_set.dart';
+
+import 'dart:collection';
 
 import 'package:little_fme/components/icona.dart';
 
@@ -11,7 +12,12 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MyGame extends Game {
+  final SharedPreferences storage;
   Size screenSize;
 
   int n;
@@ -29,12 +35,12 @@ class MyGame extends Game {
   Map<String, MyElement> elements;
   Map<String, Recipe> recipes;
   Set<Icona> iconas;
-  OrderedSet<String> descoberts;
+  SplayTreeSet<String> descoberts;
 
   Icona holding;
   MyElement detailsShow;
 
-  MyGame() {
+  MyGame(this.storage) {
     initialize();
   }
 
@@ -56,8 +62,9 @@ class MyGame extends Game {
     elements = Map<String, MyElement>();
     recipes = Map<String, Recipe>();
     iconas = Set<Icona>();
-    descoberts = OrderedSet<String>();
 
+    descoberts = new SplayTreeSet<String>();
+    updateDescoberts();
     afegirDades();
 
     recalcPosDescoberts();
@@ -76,13 +83,22 @@ class MyGame extends Game {
     elements["javier"] = javier;
     elements["maria"] = maria;
     elements["laura"] = laura;
+    recipes["anna-maria"] = Recipe("lala", anna, maria, laura);
     recipes["anna-erik"] = Recipe("endogamia", anna, erik, ivet);
+    recipes["anna-javier"] = Recipe("endogamia2", anna, javier, laura);
     descoberts.add("anna");
     descoberts.add("erik");
-    descoberts.add("ivet");
     descoberts.add("javier");
     descoberts.add("maria");
-    descoberts.add("laura");
+    updateStorageDescoberts();
+  }
+
+  void updateStorageDescoberts() {
+    storage.setStringList('descoberts', descoberts.toList());
+  }
+
+  void updateDescoberts() {
+    descoberts = new SplayTreeSet.from(storage.getStringList('descoberts') ?? List<String>());
   }
 
   void recalcPosDescoberts() {
@@ -302,6 +318,7 @@ class MyGame extends Game {
         iconas.add(Icona(this, best.x, best.y, recipes[P1].p));
         if (!descoberts.contains(recipes[P1].p.id)) {
           descoberts.add(recipes[P1].p.id);
+          updateStorageDescoberts();
           recalcPosDescoberts();
         }
         iconas.remove(holding);
@@ -311,6 +328,7 @@ class MyGame extends Game {
         iconas.add(Icona(this, best.x, best.y, recipes[P2].p));
         if (!descoberts.contains(recipes[P2].p.id)) {
           descoberts.add(recipes[P2].p.id);
+          updateStorageDescoberts();
           recalcPosDescoberts();
         }
         iconas.remove(holding);
@@ -375,3 +393,5 @@ class MyGame extends Game {
     }
   }
 }
+
+
