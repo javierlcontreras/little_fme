@@ -63,9 +63,9 @@ class MyGame extends Game {
     resize(await Flame.util.initialDimensions());
 
     tile = screenSize.width/8;
-    n = 5;
+    n = 4;
     pad = tile/3;
-    smalltile = (screenSize.width - (n+3)*pad)/n;
+    smalltile = (screenSize.width - (n+5)*pad)/n;
     bigtile = screenSize.height/2 - 8*pad;
     recipetile = (screenSize.height - bigtile - 13*pad - 4*pad)/3;
 
@@ -121,19 +121,22 @@ class MyGame extends Game {
   }
 
   void recalcPosDescoberts() {
-    double mx = 2*pad, my = 6*pad;
+    double mx = 3*pad, my = 6*pad;
 
     scrollMax = 1.0*((descoberts?.length ?? 0)/n).ceil();
     scrollMax -= ((screenSize.height - 7*pad)/(smalltile + 2*pad)).floor();
     scrollMax *= (smalltile + 2*pad);
     if (scrollMax < 0) scrollMax = 0;
 
+    int it = 0;
     descoberts?.forEach((String nom) {
       elements[nom].x = mx;
       elements[nom].y = my;
       mx += smalltile + pad;
-      if (mx > screenSize.width - 2*pad) {
-        mx = 2*pad;
+      it++;
+      if (it == n) {
+        it = 0;
+        mx = 3*pad;
         my += smalltile + 2*pad;
       }
     });
