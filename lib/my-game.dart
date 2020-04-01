@@ -37,6 +37,7 @@ class MyGame extends Game {
   Map<String, Recipe> recipes;
   Set<Icona> iconas;
   SplayTreeSet<String> descoberts;
+  SplayTreeSet<String> descobertsRecipes;
 
   Icona holding;
   MyElement detailsShow;
@@ -69,7 +70,10 @@ class MyGame extends Game {
     iconas = Set<Icona>();
 
     descoberts = new SplayTreeSet<String>();
+    descobertsRecipes = new SplayTreeSet<String>();
     updateDescoberts();
+    updateDescobertsRecipes();
+
     afegirDades();
 
     recalcPosDescoberts();
@@ -80,8 +84,8 @@ class MyGame extends Game {
     MyElement javier = MyElement("javier", "Javier LC", "");
     MyElement maria = MyElement("maria", "Maria Prat", "");
     MyElement laura = MyElement("laura", "Laura Arribas", "");
-    MyElement anna = MyElement("erik", "Anna Felip", "Mama");
-    MyElement erik = MyElement("anna", "Erik Ferrando", "Novato");
+    MyElement anna = MyElement("anna", "Anna Felip", "Mama");
+    MyElement erik = MyElement("erik", "Erik Ferrando", "Novato");
     elements["ivet"] = ivet;
     elements["anna"] = anna;
     elements["erik"] = erik;
@@ -105,6 +109,14 @@ class MyGame extends Game {
 
   void updateDescoberts() {
     descoberts = new SplayTreeSet.from(storage.getStringList('descoberts') ?? List<String>());
+  }
+
+  void updateStorageDescobertsRecipes() {
+    storage.setStringList('descobertsRecipes', descobertsRecipes.toList());
+  }
+
+  void updateDescobertsRecipes() {
+    descobertsRecipes = new SplayTreeSet.from(storage.getStringList('descobertsRecipes') ?? List<String>());
   }
 
   void recalcPosDescoberts() {
@@ -426,7 +438,8 @@ class MyGame extends Game {
       String P2 = best.el.id + "-" + holding.el.id;
       if (recipes.containsKey(P1)) {
         discoverRecipe(recipes[P1]);
-
+        descobertsRecipes.add(P1);
+        updateStorageDescobertsRecipes();
         iconas.add(Icona(this, best.x, best.y, recipes[P1].p));
         if (!descoberts.contains(recipes[P1].p.id)) {
           descoberts.add(recipes[P1].p.id);
@@ -438,7 +451,8 @@ class MyGame extends Game {
       }
       else if (recipes.containsKey(P2)) {
         discoverRecipe(recipes[P2]);
-
+        descobertsRecipes.add(P2);
+        updateStorageDescobertsRecipes();
         iconas.add(Icona(this, best.x, best.y, recipes[P2].p));
         if (!descoberts.contains(recipes[P2].p.id)) {
           descoberts.add(recipes[P2].p.id);
