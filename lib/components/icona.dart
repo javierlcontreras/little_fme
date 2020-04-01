@@ -53,6 +53,10 @@ class MyElement {
   double x;
   double y;
 
+  Recipe A;
+  Recipe B;
+  Recipe C;
+
   MyElement(String _id, String _name, String _desc) {
     id = _id;
     img = Sprite(id + '.png');

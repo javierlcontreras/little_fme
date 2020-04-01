@@ -21,10 +21,11 @@ class MyGame extends Game {
   Size screenSize;
 
   int n;
-  double tile, smalltile, bigtile;
+  double tile, smalltile, bigtile, recipetile;
   double pad;
 
   double scroll;
+  double scrollDetails;
   double scrollInit;
   double scrollLast;
   double scrollMax = 0;
@@ -46,15 +47,19 @@ class MyGame extends Game {
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
+
     tile = screenSize.width/8;
     n = 5;
     pad = tile/3;
     smalltile = (screenSize.width - (n+3)*pad)/n;
     bigtile = screenSize.height/2 - 8*pad;
+    recipetile = (screenSize.height - bigtile - 13*pad - 4*pad)/3;
+
     startY = 6*pad;
     endY = screenSize.height;
     scrollInit = -1;
     scroll = 0;
+    scrollDetails = 0;
     scrollLast = 0;
 
     pantalla = "mix";
@@ -71,7 +76,7 @@ class MyGame extends Game {
   }
 
   void afegirDades() {
-    MyElement ivet = MyElement("ivet", "Ivet Acosta", "");
+    MyElement ivet = MyElement("ivet", "Ivet Acosta", "Super Ivet Superbe Superbe");
     MyElement javier = MyElement("javier", "Javier LC", "");
     MyElement maria = MyElement("maria", "Maria Prat", "");
     MyElement laura = MyElement("laura", "Laura Arribas", "");
@@ -85,7 +90,8 @@ class MyGame extends Game {
     elements["laura"] = laura;
     recipes["anna-maria"] = Recipe("lala", anna, maria, laura);
     recipes["anna-erik"] = Recipe("endogamia", anna, erik, ivet);
-    recipes["anna-javier"] = Recipe("endogamia2", anna, javier, laura);
+    recipes["javier-maria"] = Recipe("endogamia2", javier, maria, ivet);
+    recipes["laura-laura"] = Recipe("endogamiaWow", laura, laura, ivet);
     descoberts.add("anna");
     descoberts.add("erik");
     descoberts.add("javier");
@@ -112,6 +118,29 @@ class MyGame extends Game {
         my += smalltile + 2*pad;
       }
     });
+  }
+
+  void discoverRecipe(Recipe S) {
+    MyElement prod = S.p;
+
+    if (prod.A == null) {
+      prod.A = S;
+      return;
+    }
+    else if (prod.A == S) return;
+
+    if (prod.B == null) {
+      prod.B = S;
+      return;
+    }
+    else if (prod.B == S) return;
+
+    if (prod.C == null) {
+      prod.C = S;
+      return;
+    }
+    else if (prod.C == S) return;
+
   }
 
   void render(Canvas canvas) {
@@ -158,7 +187,7 @@ class MyGame extends Game {
 
       canvas.drawCircle(
           Offset(screenSize.width - 3 * pad, 3 * pad),
-          pad, _black);
+          pad-1, _black);
 
       descoberts?.forEach((String nom) {
         double mx = elements[nom].x;
@@ -185,41 +214,122 @@ class MyGame extends Game {
     }
     if (pantalla == "details") {
       Rect bgRect = Rect.fromLTWH(
-          2*pad, screenSize.height/4, screenSize.width - 4 * pad, screenSize.height/2);
+          2*pad, 2*pad, screenSize.width - 4 * pad, screenSize.height - 2 * pad);
       Paint bgPaint = Paint();
       bgPaint.color = Color(0xffeeeeee);
       canvas.drawRect(bgRect, bgPaint);
 
       canvas.drawCircle(
-          Offset(screenSize.width - 4 * pad, screenSize.height/4 + 2*pad),
-          pad, _black);
+          Offset(screenSize.width - 4 * pad, 4*pad),
+          pad-1, _black);
 
       bgRect = Rect.fromLTWH(
         screenSize.width/2 - bigtile/2,
-        screenSize.height/2 - bigtile/2,
+        6*pad,
         bigtile,
         bigtile,
       );
       detailsShow.img.renderRect(canvas, bgRect);
       TextSpan span = new TextSpan(
-          style: new TextStyle(fontSize: pad, color: Color(0xff000000)),
+          style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
           text: detailsShow.name);
       TextPainter tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);
       tp.layout();
-      tp.paint(canvas, new Offset(3*pad, screenSize.height/2 + bigtile/2 + pad));
+      tp.paint(canvas, new Offset(3*pad, 6*pad + bigtile + 1*pad));
 
       span = new TextSpan(
-          style: new TextStyle(fontSize: 4*pad/5, color: Color(0xff000000)),
+          style: new TextStyle(fontSize: pad, color: Color(0xff000000)),
           text: detailsShow.desc);
       tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);
       tp.layout();
-      tp.paint(canvas, new Offset(3*pad, screenSize.height/2 + bigtile/2 + 2.5*pad));
+      tp.paint(canvas, new Offset(3*pad, 6*pad + bigtile + 4*pad));
 
+      if (detailsShow.A != null) {
+        showRecipe(bigtile + 12*pad, detailsShow.A, canvas);
+      }
+      if (detailsShow.B != null) {
+        showRecipe(bigtile + 13.5*pad + recipetile, detailsShow.B, canvas);
+      }
+      if (detailsShow.C != null) {
+        showRecipe(bigtile + 15*pad + 2*recipetile, detailsShow.C, canvas);
+      }
     }
+  }
+
+  void showRecipe(double y, Recipe A, Canvas canvas) {
+    Rect bgRect = Rect.fromLTWH(
+      3*pad,
+      y,
+      recipetile,
+      recipetile,
+    );
+    TextSpan span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.m1.name);
+    TextPainter tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(3*pad, y + recipetile + pad/2));
+
+    double xplus = (3*pad + screenSize.width/2 - recipetile/2)/2 + recipetile/2;
+    span = new TextSpan(
+        style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
+        text: "+");
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(xplus - 3*pad/4, y + recipetile/2 - pad));
+
+
+    A.m1.img.renderRect(canvas, bgRect);
+    bgRect = Rect.fromLTWH(
+      screenSize.width/2 - recipetile/2,
+      y,
+      recipetile,
+      recipetile,
+    );
+    A.m2.img.renderRect(canvas, bgRect);
+    span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.m2.name);
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(screenSize.width/2 - recipetile/2, y + recipetile + pad/2));
+
+    double xeq = (screenSize.width - recipetile - 3*pad + screenSize.width/2 - recipetile/2)/2 + recipetile/2;
+    span = new TextSpan(
+        style: new TextStyle(fontSize: 2*pad, color: Color(0xff000000)),
+        text: "=");
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(xeq - pad, y + recipetile/2 - pad));
+
+    bgRect = Rect.fromLTWH(
+      screenSize.width - recipetile - 3*pad,
+      y,
+      recipetile,
+      recipetile,
+    );
+    A.p.img.renderRect(canvas, bgRect);
+    span = new TextSpan(
+        style: new TextStyle(fontSize: pad/2, color: Color(0xff000000)),
+        text:  A.p.name);
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(screenSize.width - recipetile - 3*pad, y + recipetile + pad/2));
+
   }
 
   void resize(Size size) {
@@ -315,6 +425,8 @@ class MyGame extends Game {
       String P1 = holding.el.id + "-" + best.el.id;
       String P2 = best.el.id + "-" + holding.el.id;
       if (recipes.containsKey(P1)) {
+        discoverRecipe(recipes[P1]);
+
         iconas.add(Icona(this, best.x, best.y, recipes[P1].p));
         if (!descoberts.contains(recipes[P1].p.id)) {
           descoberts.add(recipes[P1].p.id);
@@ -325,6 +437,8 @@ class MyGame extends Game {
         iconas.remove(best);
       }
       else if (recipes.containsKey(P2)) {
+        discoverRecipe(recipes[P2]);
+
         iconas.add(Icona(this, best.x, best.y, recipes[P2].p));
         if (!descoberts.contains(recipes[P2].p.id)) {
           descoberts.add(recipes[P2].p.id);
@@ -361,10 +475,7 @@ class MyGame extends Game {
     }
     else if (pantalla == "details") {
       if (dist(x, y,
-          screenSize.width - 4 * pad,
-          screenSize.height/4 + 2*pad) < tile ||
-          y < screenSize.height/4  ||
-          y > 3*screenSize.height/4) {
+          screenSize.width - 4 * pad, 4*pad) < tile) {
         pantalla = "add";
       }
     }
@@ -393,5 +504,3 @@ class MyGame extends Game {
     }
   }
 }
-
-
