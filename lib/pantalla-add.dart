@@ -74,8 +74,11 @@ class PantallaAdd {
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    canvas.drawCircle(
-        Offset(game.screenSize.width - 3 * game.pad, 3 * game.pad),
-        game.pad-1, _black);
+    final icon = Icons.close;
+    TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
+    textPainter.text = TextSpan(text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(fontSize: 2*game.pad-2,fontFamily: icon.fontFamily, color: Color(0xff000000)));
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(game.screenSize.width - 4 * game.pad - 1, 2*game.pad + 1));
   }
 }

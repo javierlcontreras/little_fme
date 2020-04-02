@@ -39,9 +39,12 @@ class PantallaDetails {
     bgPaint.color = Color(0xffeeeeee);
     canvas.drawRect(bgRect, bgPaint);
 
-    canvas.drawCircle(
-        Offset(game.screenSize.width - 4 * game.pad, 4*game.pad),
-        game.pad-1, _black);
+    final icon = Icons.close;
+    TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
+    textPainter.text = TextSpan(text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(fontSize: 2*game.pad-2,fontFamily: icon.fontFamily, color: Color(0xff000000)));
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(game.screenSize.width - 5 * game.pad - 1, 3*game.pad + 1));
 
     bgRect = Rect.fromLTWH(
       game.screenSize.width/2 - game.bigtile/2,
@@ -71,13 +74,13 @@ class PantallaDetails {
     tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 4*game.pad));
 
     if (game.detailsShow.A != null) {
-      game.detailsShow.A.showRecipe(game.bigtile + 12*game.pad, canvas);
+      game.detailsShow.A.showRecipe(game.bigtile + 13*game.pad, canvas);
     }
     if (game.detailsShow.B != null) {
-      game.detailsShow.B.showRecipe(game.bigtile + 13.5*game.pad + game.recipetile, canvas);
+      game.detailsShow.B.showRecipe(game.bigtile + 14.5*game.pad + game.recipetile, canvas);
     }
     if (game.detailsShow.C != null) {
-      game.detailsShow.C.showRecipe(game.bigtile + 15*game.pad + 2*game.recipetile, canvas);
+      game.detailsShow.C.showRecipe(game.bigtile + 16*game.pad + 2*game.recipetile, canvas);
     }
   }
 }

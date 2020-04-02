@@ -45,7 +45,7 @@ class Icona {
     el.img.renderRect(canvas, bgRect);
 
     TextSpan span = new TextSpan(
-        style: new TextStyle(fontSize: game.pad / 2, color: Color(0xffeeeeee)),
+        style: new TextStyle(fontSize: game.pad / 2, color: Color(0xff393939)),
         text: el.name);
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,

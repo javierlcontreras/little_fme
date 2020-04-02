@@ -69,7 +69,7 @@ class MyGame extends Game {
     pad = tile/3;
     smalltile = (screenSize.width - (n+5)*pad)/n;
     bigtile = screenSize.height/2 - 8*pad;
-    recipetile = (screenSize.height - bigtile - 13*pad - 6*pad)/3;
+    recipetile = (screenSize.height - bigtile - 13*pad - 7*pad)/3;
 
     startY = pad;
     endY = screenSize.height - pad;
@@ -77,7 +77,8 @@ class MyGame extends Game {
     scroll = 0;
     scrollDetails = 0;
     scrollLast = 0;
-    mixColor = 0xff1E6882;
+
+    mixColor = 0xffAAD3FF;
     pantalla = "mix";
 
     elements = Map<String, MyElement>();
@@ -95,7 +96,7 @@ class MyGame extends Game {
     readDescobertsRecipes();
 
     // TODO uncomment reads to not restart game every time
-    // cheat();
+    cheat();
 
     afegirDades();
 
