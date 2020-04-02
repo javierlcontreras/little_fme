@@ -22,40 +22,17 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Icona {
+class PantallaInicial {
   final MyGame game;
 
-  double x;
-  double y;
-  MyElement el;
-
-  Icona(this.game, double _x, double _y, MyElement _el) {
-    x = _x;
-    y = _y;
-    el = _el;
-  }
+  PantallaInicial(this.game) {}
 
   void render(Canvas canvas) {
     Rect bgRect = Rect.fromLTWH(
-      x - game.tile/2,
-      y - game.tile/2,
-      game.tile,
-      game.tile,
-    );
-    el.img.renderRect(canvas, bgRect);
-
-    TextSpan span = new TextSpan(
-        style: new TextStyle(fontSize: game.pad / 2, color: Color(0xff393939)),
-        text: el.name + (el.mort ? " \u2713" : ""));
-    TextPainter tp = new TextPainter(
-        text: span, textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr);
-    tp.layout(minWidth: game.tile);
-    tp.paint(canvas, new Offset(x - game.tile/2, y + game.tile/2 + game.pad / 2));
+        game.pad, game.pad, game.screenSize.width - 2 * game.pad, game.screenSize.height/3);
+    Paint bgPaint = Paint();
+    bgPaint.color = Color(0xffffffff);
+    canvas.drawRect(bgRect, bgPaint);
   }
 
-  void move(double _x, double _y) {
-    x = _x;
-    y = _y;
-  }
 }

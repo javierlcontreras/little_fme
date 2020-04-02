@@ -38,11 +38,24 @@ class MyElement {
   Recipe B;
   Recipe C;
 
+  int maxr;
+  bool mort;
+
   MyElement(this.game, String _id, String _name, String _desc)  {
     id = _id;
     loadImage();
     name = _name;
     desc = _desc;
+    maxr = 0;
+    mort = true;
+  }
+
+  int countr() {
+    int res = 0;
+    if (A != null) res++;
+    if (B != null) res++;
+    if (C != null) res++;
+    return res;
   }
 
   void loadImage() {
@@ -62,7 +75,7 @@ class MyElement {
 
       TextSpan span = new TextSpan(
           style: new TextStyle(fontSize: game.pad / 2, color: Color(0xff000000)),
-          text: name);
+          text: name + (mort ? " \u2713" : ""));
       TextPainter tp = new TextPainter(
           text: span, textAlign: TextAlign.center,
           textDirection: TextDirection.ltr);

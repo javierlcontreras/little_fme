@@ -44,7 +44,7 @@ class PantallaMix {
 
     if (game.holding == null) {
       Paint _green = Paint()
-        ..color = Colors.green
+        ..color = Color(0xff25d366)
         ..style = PaintingStyle.fill;
       final icon = Icons.add_circle;
       TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);

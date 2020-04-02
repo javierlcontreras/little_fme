@@ -52,10 +52,11 @@ class PantallaDetails {
       game.bigtile,
       game.bigtile,
     );
+
     game.detailsShow.img.renderRect(canvas, bgRect);
     TextSpan span = new TextSpan(
         style: new TextStyle(fontSize: 2*game.pad, color: Color(0xff000000)),
-        text: game.detailsShow.name);
+        text: game.detailsShow.name + (game.detailsShow.mort ? " \u2713" : ""));
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
@@ -73,14 +74,27 @@ class PantallaDetails {
     tp.layout(minWidth: game.screenSize.width - 6 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
     tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 4*game.pad));
 
+    String txt = game.detailsShow.countr().toString() + "/" + game.detailsShow.maxr.toString() + " receptes descobertes";
+    if (game.detailsShow.maxr == 0) txt = "Aquest element és bàsic";
+    span = new TextSpan(
+        style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
+        text: txt);
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.left,
+        textDirection: TextDirection.ltr,
+        maxLines: 10);
+    tp.layout(minWidth: game.screenSize.width - 6 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
+    tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 7*game.pad));
+
+
     if (game.detailsShow.A != null) {
-      game.detailsShow.A.showRecipe(game.bigtile + 13*game.pad, canvas);
+      game.detailsShow.A.showRecipe(game.bigtile + 15*game.pad, canvas);
     }
     if (game.detailsShow.B != null) {
-      game.detailsShow.B.showRecipe(game.bigtile + 14.5*game.pad + game.recipetile, canvas);
+      game.detailsShow.B.showRecipe(game.bigtile + 16.5*game.pad + game.recipetile, canvas);
     }
     if (game.detailsShow.C != null) {
-      game.detailsShow.C.showRecipe(game.bigtile + 16*game.pad + 2*game.recipetile, canvas);
+      game.detailsShow.C.showRecipe(game.bigtile + 18*game.pad + 2*game.recipetile, canvas);
     }
   }
 }

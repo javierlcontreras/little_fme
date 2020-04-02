@@ -43,7 +43,7 @@ class PantallaAdd {
     });
 
     bgRect = Rect.fromLTWH(
-        game.pad, game.pad, game.screenSize.width - 2 * game.pad, 4*game.pad);
+        game.pad, game.pad, game.screenSize.width - 2 * game.pad, 5*game.pad);
     canvas.drawRect(bgRect, bgPaint);
 
     bgRect = Rect.fromLTWH(
@@ -64,7 +64,16 @@ class PantallaAdd {
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
     tp.layout();
-    tp.paint(canvas, new Offset(2*game.pad, 2*game.pad + game.pad/2));
+    tp.paint(canvas, new Offset(2*game.pad, 2*game.pad));
+
+    span = new TextSpan(
+        style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
+        text: game.descobertsRecipes.length.toString() + "/" + game.recipes.length.toString() + " receptes descobertes");
+    tp = new TextPainter(
+        text: span, textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, new Offset(2*game.pad, 2*game.pad + 3/2*game.pad));
 
     drawCloseButton(canvas);
   }

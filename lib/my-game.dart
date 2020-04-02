@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:little_fme/my-game.dart';
+import 'package:little_fme/pantalla-inicial.dart';
 import 'package:little_fme/pantalla-mix.dart';
 import 'package:little_fme/pantalla-add.dart';
 import 'package:little_fme/pantalla-details.dart';
@@ -44,6 +45,7 @@ class MyGame extends Game {
   String pantalla; //mix, add, details
   int mixColor;
 
+  PantallaInicial inicial;
   PantallaMix mix;
   PantallaAdd add;
   PantallaDetails details;
@@ -68,8 +70,8 @@ class MyGame extends Game {
     n = 4;
     pad = tile/3;
     smalltile = (screenSize.width - (n+5)*pad)/n;
-    bigtile = screenSize.height/2 - 8*pad;
-    recipetile = (screenSize.height - bigtile - 13*pad - 7*pad)/3;
+    bigtile = screenSize.height/2 - 12*pad;
+    recipetile = (screenSize.height - bigtile - 15*pad - 7*pad)/3;
 
     startY = pad;
     endY = screenSize.height - pad;
@@ -79,12 +81,13 @@ class MyGame extends Game {
     scrollLast = 0;
 
     mixColor = 0xffAAD3FF;
-    pantalla = "mix";
+    pantalla = "inicial";
 
     elements = Map<String, MyElement>();
     recipes = Map<String, Recipe>();
     iconas = Set<Icona>();
 
+    inicial = PantallaInicial(this);
     mix = PantallaMix(this);
     add = PantallaAdd(this);
     details = PantallaDetails(this);
@@ -96,12 +99,24 @@ class MyGame extends Game {
     readDescobertsRecipes();
 
     // TODO uncomment reads to not restart game every time
-    cheat();
 
     afegirDades();
+    //cheat();
 
+    propagarGastades();
     propagarDescobertsRecipes();
     recalcPosDescoberts();
+  }
+
+  void propagarGastades() {
+    recipes.forEach((String id, Recipe r) {
+      r.p.maxr++;
+      if (!descobertsRecipes.contains(id)) {
+        r.m1.mort = false;
+        r.m2.mort = false;
+      }
+    });
+
   }
 
   void propagarDescobertsRecipes() {
@@ -150,6 +165,7 @@ class MyGame extends Game {
 
   void render(Canvas canvas) {
     mix.render(canvas);
+    if (pantalla == "inicial") inicial.render(canvas);
     if (pantalla == "add" || pantalla == "details") {
       add.render(canvas);
     }
@@ -160,6 +176,10 @@ class MyGame extends Game {
 
   // GESTURES
   void onPanStart(DragStartDetails d) {
+    if (pantalla == "inicial") {
+      pantalla = "mix";
+      return;
+    }
     double x = d.globalPosition.dx;
     double y = d.globalPosition.dy;
     if (pantalla == "mix") {
@@ -245,6 +265,7 @@ class MyGame extends Game {
       String P = M1 + "-" + M2;
       if (recipes.containsKey(P)) {
         recipes[P].discoverRecipe();
+
         descobertsRecipes.add(P);
         saveDescobertsRecipes();
         iconas.add(Icona(this, best.x, best.y, recipes[P].p));
@@ -252,6 +273,8 @@ class MyGame extends Game {
           descoberts.add(recipes[P].p.id);
           saveDescoberts();
           recalcPosDescoberts();
+          pantalla = "details";
+          detailsShow = elements[recipes[P].p.id];
         }
         iconas.remove(holding);
         iconas.remove(best);
@@ -263,6 +286,10 @@ class MyGame extends Game {
     }
   }
   void onTapDown(TapDownDetails d) {
+    if (pantalla == "inicial") {
+      pantalla = "mix";
+      return;
+    }
   }
   void onTapUp(TapUpDetails d) {
     double x = d.globalPosition.dx;
@@ -394,7 +421,7 @@ class MyGame extends Game {
     elements["guapo"] = guapo;
     MyElement dormir = MyElement(this, "dormir", "Dormir", "Zzzz");
     elements["dormir"] = dormir;
-    MyElement erikferrando = MyElement(this, "erikferrando", "Ferrando", "Ferpolles, Nepe, Fulrecu, Fregando, Fernepinya...");
+    MyElement erikferrando = MyElement(this, "erikferrando", "Erik Ferrando", "Ferpolles, Nepe, Fulrecu, Fregando, Fernepinya...");
     elements["erikferrando"] = erikferrando;
     MyElement segon = MyElement(this, "segon", "Segon", "Millor curs");
     elements["segon"] = segon;
@@ -448,7 +475,7 @@ class MyGame extends Game {
     elements["amaliasimon"] = amaliasimon;
     MyElement zorra = MyElement(this, "zorra", "Zorra", "RAAAAWR");
     elements["zorra"] = zorra;
-    MyElement albertgimo = MyElement(this, "albertgimo", "Gimó", "Albert-Francesc");
+    MyElement albertgimo = MyElement(this, "albertgimo", "Albert Gimó", "Albert-Francesc");
     elements["albertgimo"] = albertgimo;
     MyElement esport = MyElement(this, "esport", "Esport", "I just wanna make you sweat");
     elements["esport"] = esport;
@@ -472,7 +499,7 @@ class MyGame extends Game {
     elements["gerardcontreras"] = gerardcontreras;
     MyElement premi = MyElement(this, "premi", "Premi", "I el guanyador és…. la diversió!");
     elements["premi"] = premi;
-    MyElement davidariza = MyElement(this, "davidariza", "Ariza", "Eleven");
+    MyElement davidariza = MyElement(this, "davidariza", "David Ariza", "Eleven");
     elements["davidariza"] = davidariza;
     MyElement cefme = MyElement(this, "cefme", "CEFME", "SALUT, CEFME");
     elements["cefme"] = cefme;
@@ -711,7 +738,7 @@ class MyGame extends Game {
     recipes["cfis-cuqui"] = Recipe(this, "rafahhajjar1", cfis, cuqui, rafahhajjar);
     recipes["dele-salseo"] = Recipe(this, "sortida1", dele, salseo, sortida);
     recipes["dele-festa"] = Recipe(this, "sortida2", dele, festa, sortida);
-    recipes["cfis-profe"] = Recipe(this, "pelea1", cfis, profe, pelea);
+    recipes["drama-drama"] = Recipe(this, "pelea1", drama, drama, pelea);
     recipes["drama-examen"] = Recipe(this, "recu1", drama, examen, recu);
     recipes["cuqui-dele"] = Recipe(this, "dunatomas1", cuqui, dele, dunatomas);
     recipes["lio-lio"] = Recipe(this, "graf1", lio, lio, graf);
@@ -855,7 +882,6 @@ class MyGame extends Game {
     recipes["cfis-iaio"] = Recipe(this, "senyorgrane1", cfis, iaio, senyorgrane);
     recipes["info-risas"] = Recipe(this, "jocdalgorismia1", info, risas, jocdalgorismia);
     recipes["amor-andreuhuguet"] = Recipe(this, "martinacolas", amor, andreuhuguet, martinacolas);
-    recipes["drama-tiracanyes"] = Recipe(this, "cobra1", drama, tiracanyes, cobra);
     recipes["cinque-cobra"] = Recipe(this, "ericvalls1", cinque, cobra, ericvalls);
     recipes["quart-tercer"] = Recipe(this, "k91", quart, tercer, k9);
     recipes["drama-lio"] = Recipe(this, "cobra2", drama, lio, cobra);
@@ -949,6 +975,8 @@ class MyGame extends Game {
     recipes["ainaazkargorta-lio"] = Recipe(this, "alexaibar1", ainaazkargorta, lio, alexaibar);
     recipes["alexaibar-amor"] = Recipe(this, "arnauprats1", alexaibar, amor, arnauprats);
     recipes["heredia-maripaz"] = Recipe(this, "io1", heredia, maripaz, io);
+    recipes["claudiarodes-mortissim"] = Recipe(this, "claudiageri1", claudiarodes, mortissim, gerardcontreras);
+    recipes["gerardcontreras-mortissim"] = Recipe(this, "claudiageri2", gerardcontreras, mortissim, claudiarodes);
 
     descoberts.add("alcohol");
     descoberts.add("mates");
@@ -956,460 +984,18 @@ class MyGame extends Game {
     descoberts.add("drama");
     descoberts.add("salseo");
     descoberts.add("risas");
-
   }
+
   void cheat() {
     descoberts.clear();
     descobertsRecipes.clear();
     saveDescoberts();
     saveDescobertsRecipes();
-
-    descoberts.add("mates");
-    descoberts.add("alcohol");
-    descoberts.add("drama");
-    descoberts.add("salseo");
-    descoberts.add("cuqui");
-    descoberts.add("risas");
-    descoberts.add("ivetacosta");
-    descoberts.add("fme");
-    descoberts.add("novatos");
-    descoberts.add("birres");
-    descoberts.add("amor");
-    descoberts.add("festa");
-    descoberts.add("terrassa");
-    descoberts.add("samucapellas");
-    descoberts.add("potar");
-    descoberts.add("upc");
-    descoberts.add("profe");
-    descoberts.add("barsanjuan");
-    descoberts.add("lio");
-    descoberts.add("cfis");
-    descoberts.add("ressaca");
-    descoberts.add("dele");
-    descoberts.add("maripaz");
-    descoberts.add("examen");
-    descoberts.add("albertjimenez");
-    descoberts.add("gabrialujas");
-    descoberts.add("oriolbaeza");
-    descoberts.add("luisdelbar");
-    descoberts.add("sergiodelbar");
-    descoberts.add("rafahhajjar");
-    descoberts.add("sortida");
-    descoberts.add("pelea");
-    descoberts.add("recu");
-    descoberts.add("dunatomas");
-    descoberts.add("graf");
-    descoberts.add("abracada");
-    descoberts.add("guapo");
-    descoberts.add("dormir");
-    descoberts.add("erikferrando");
-    descoberts.add("segon");
-    descoberts.add("odi");
-    descoberts.add("einstein");
-    descoberts.add("numerica");
-    descoberts.add("tiracanyes");
-    descoberts.add("gespeta");
-    descoberts.add("foratalsostre");
-    descoberts.add("tercer");
-    descoberts.add("brisca");
-    descoberts.add("borde");
-    descoberts.add("elegant");
-    descoberts.add("rubendelbar");
-    descoberts.add("edusimon");
-    descoberts.add("laiapomar");
-    descoberts.add("frisbee");
-    descoberts.add("quart");
-    descoberts.add("secta");
-    descoberts.add("enaitzquilez");
-    descoberts.add("olgamartinez");
-    descoberts.add("porros");
-    descoberts.add("lauraarribas");
-    descoberts.add("irenecusine");
-    descoberts.add("marionasanchez");
-    descoberts.add("festadenadal");
-    descoberts.add("amaliasimon");
-    descoberts.add("zorra");
-    descoberts.add("albertgimo");
-    descoberts.add("esport");
-    descoberts.add("cinque");
-    descoberts.add("claudiarodes");
-    descoberts.add("patricorbera");
-    descoberts.add("victordeblas");
-    descoberts.add("picatrencada");
-    descoberts.add("perrofla");
-    descoberts.add("jordicondom");
-    descoberts.add("xino");
-    descoberts.add("gerardcontreras");
-    descoberts.add("premi");
-    descoberts.add("davidariza");
-    descoberts.add("cefme");
-    descoberts.add("nofestes");
-    descoberts.add("annafelip");
-    descoberts.add("mortissim");
-    descoberts.add("javilopezcontreras");
-    descoberts.add("heredia");
-    descoberts.add("roura");
-    descoberts.add("pichi");
-    descoberts.add("luissierra");
-    descoberts.add("jaumemarti");
-    descoberts.add("cubatada");
-    descoberts.add("pauredon");
-    descoberts.add("info");
-    descoberts.add("lamari");
-    descoberts.add("mariaprat");
-    descoberts.add("janafarran");
-    descoberts.add("jordicivit");
-    descoberts.add("carlotacorrales");
-    descoberts.add("martinacolas");
-    descoberts.add("verapujadas");
-    descoberts.add("carlotagracia");
-    descoberts.add("andreuhuguet");
-    descoberts.add("jordivila");
-    descoberts.add("maxruiz");
-    descoberts.add("edupena");
-    descoberts.add("danimunoz");
-    descoberts.add("edgarmoreno");
-    descoberts.add("silviagarcia");
-    descoberts.add("josepfontana");
-    descoberts.add("ainaazkargorta");
-    descoberts.add("perellorens");
-    descoberts.add("narciso");
-    descoberts.add("jocdalgorismia");
-    descoberts.add("novatorevelacio");
-    descoberts.add("edps");
-    descoberts.add("festadenovatos");
-    descoberts.add("festahawaiana");
-    descoberts.add("jaumefranch");
-    descoberts.add("festatropical");
-    descoberts.add("pibuti");
-    descoberts.add("merceolle");
-    descoberts.add("xaviercabre");
-    descoberts.add("leonsito");
-    descoberts.add("pacs");
-    descoberts.add("tonto");
-    descoberts.add("dades");
-    descoberts.add("dissenydesamarreta");
-    descoberts.add("inu");
-    descoberts.add("novatades");
-    descoberts.add("cadenaderoba");
-    descoberts.add("fmemes00");
-    descoberts.add("matematiksan0n1ms");
-    descoberts.add("memesfme");
-    descoberts.add("conjuntbuit");
-    descoberts.add("barja");
-    descoberts.add("np");
-    descoberts.add("iaio");
-    descoberts.add("teatrefme");
-    descoberts.add("festadecarnaval");
-    descoberts.add("palomo");
-    descoberts.add("caramotxo");
-    descoberts.add("ferranlopez");
-    descoberts.add("jofrecosta");
-    descoberts.add("amandasanjuan");
-    descoberts.add("lavabocfis");
-    descoberts.add("bikinada");
-    descoberts.add("festagran");
-    descoberts.add("estadistics");
-    descoberts.add("senyorgrane");
-    descoberts.add("cobra");
-    descoberts.add("ericvalls");
-    descoberts.add("k9");
-    descoberts.add("rosa");
-    descoberts.add("joc");
-    descoberts.add("mus");
-    descoberts.add("catan");
-    descoberts.add("escacs");
-    descoberts.add("pingpong");
-    descoberts.add("rouritos");
-    descoberts.add("menjar");
-    descoberts.add("lomoqueso");
-    descoberts.add("croissant");
-    descoberts.add("tupper");
-    descoberts.add("temaso");
-    descoberts.add("volum");
-    descoberts.add("discurs");
-    descoberts.add("jordibosch");
-    descoberts.add("ambulancia");
-    descoberts.add("burro");
-    descoberts.add("pepino");
-    descoberts.add("biblio");
-    descoberts.add("marcesquerra");
-    descoberts.add("pikipiki");
-    descoberts.add("team");
-    descoberts.add("llops");
-    descoberts.add("trivial");
-    descoberts.add("assemblea");
-    descoberts.add("andreuboix");
-    descoberts.add("alexaibar");
-    descoberts.add("arnauprats");
-    descoberts.add("plattrencat");
-    descoberts.add("bolera");
-    descoberts.add("io");
-    descoberts.add("danivilardell");
-    descoberts.add("baixet");
-    descobertsRecipes.add("alcohol-fme");
-    descobertsRecipes.add("mates-mates");
-    descobertsRecipes.add("cuqui-mates");
-    descobertsRecipes.add("birres-salseo");
-    descobertsRecipes.add("drama-salseo");
-    descobertsRecipes.add("fme-salseo");
-    descobertsRecipes.add("amor-ivetacosta");
-    descobertsRecipes.add("drama-ivetacosta");
-    descobertsRecipes.add("amor-rafahhajjar");
-    descobertsRecipes.add("alcohol-alcohol");
-    descobertsRecipes.add("fme-fme");
-    descobertsRecipes.add("fme-mates");
-    descobertsRecipes.add("birres-fme");
-    descobertsRecipes.add("festa-salseo");
-    descobertsRecipes.add("mates-upc");
-    descobertsRecipes.add("alcohol-festa");
-    descobertsRecipes.add("fme-upc");
-    descobertsRecipes.add("profe-salseo");
-    descobertsRecipes.add("drama-profe");
-    descobertsRecipes.add("potar-terrassa");
-    descobertsRecipes.add("novatos-terrassa");
-    descobertsRecipes.add("barsanjuan-cuqui");
-    descobertsRecipes.add("alcohol-barsanjuan");
-    descobertsRecipes.add("cfis-cuqui");
-    descobertsRecipes.add("dele-salseo");
-    descobertsRecipes.add("dele-festa");
-    descobertsRecipes.add("cfis-profe");
-    descobertsRecipes.add("drama-examen");
-    descobertsRecipes.add("cuqui-dele");
-    descobertsRecipes.add("lio-lio");
-    descobertsRecipes.add("cuqui-rafahhajjar");
-    descobertsRecipes.add("rafahhajjar-rafahhajjar");
-    descobertsRecipes.add("ressaca-sortida");
-    descobertsRecipes.add("cfis-recu");
-    descobertsRecipes.add("mates-novatos");
-    descobertsRecipes.add("drama-pelea");
-    descobertsRecipes.add("pelea-samucapellas");
-    descobertsRecipes.add("alcohol-samucapellas");
-    descobertsRecipes.add("dormir-mates");
-    descobertsRecipes.add("alcohol-guapo");
-    descobertsRecipes.add("dormir-fme");
-    descobertsRecipes.add("erikferrando-sortida");
-    descobertsRecipes.add("mates-segon");
-    descobertsRecipes.add("salseo-segon");
-    descobertsRecipes.add("cuqui-odi");
-    descobertsRecipes.add("guapo-guapo");
-    descobertsRecipes.add("dormir-terrassa");
-    descobertsRecipes.add("barsanjuan-tiracanyes");
-    descobertsRecipes.add("drama-tiracanyes");
-    descobertsRecipes.add("brisca-tercer");
-    descobertsRecipes.add("secta-segon");
-    descobertsRecipes.add("gespeta-sortida");
-    descobertsRecipes.add("mates-tercer");
-    descobertsRecipes.add("salseo-tercer");
-    descobertsRecipes.add("borde-dele");
-    descobertsRecipes.add("borde-brisca");
-    descobertsRecipes.add("gespeta-gespeta");
-    descobertsRecipes.add("brisca-salseo");
-    descobertsRecipes.add("brisca-cuqui");
-    descobertsRecipes.add("brisca-lio");
-    descobertsRecipes.add("elegant-festa");
-    descobertsRecipes.add("brisca-elegant");
-    descobertsRecipes.add("edusimon-ivetacosta");
-    descobertsRecipes.add("lauraarribas-novatos");
-    descobertsRecipes.add("frisbee-frisbee");
-    descobertsRecipes.add("mates-quart");
-    descobertsRecipes.add("cuqui-secta");
-    descobertsRecipes.add("borde-secta");
-    descobertsRecipes.add("novatos-porros");
-    descobertsRecipes.add("festa-lauraarribas");
-    descobertsRecipes.add("porros-porros");
-    descobertsRecipes.add("amor-porros");
-    descobertsRecipes.add("risas-secta");
-    descobertsRecipes.add("frisbee-risas");
-    descobertsRecipes.add("cuqui-quart");
-    descobertsRecipes.add("festadenadal-salseo");
-    descobertsRecipes.add("festadenadal-risas");
-    descobertsRecipes.add("elegant-quart");
-    descobertsRecipes.add("cuqui-elegant");
-    descobertsRecipes.add("cinque-segon");
-    descobertsRecipes.add("esport-fme");
-    descobertsRecipes.add("einstein-picatrencada");
-    descobertsRecipes.add("amor-perrofla");
-    descobertsRecipes.add("irenecusine-jordicondom");
-    descobertsRecipes.add("brisca-premi");
-    descobertsRecipes.add("javilopezcontreras-pelea");
-    descobertsRecipes.add("javilopezcontreras-profe");
-    descobertsRecipes.add("cefme-gespeta");
-    descobertsRecipes.add("erikferrando-javilopezcontreras");
-    descobertsRecipes.add("cuqui-profe");
-    descobertsRecipes.add("barsanjuan-ivetacosta");
-    descobertsRecipes.add("mates-roura");
-    descobertsRecipes.add("marionasanchez-salseo");
-    descobertsRecipes.add("alcohol-dele");
-    descobertsRecipes.add("cuqui-info");
-    descobertsRecipes.add("carlotacorrales-dunatomas");
-    descobertsRecipes.add("albertjimenez-ivetacosta");
-    descobertsRecipes.add("lauraarribas-odi");
-    descobertsRecipes.add("baixet-ivetacosta");
-    descobertsRecipes.add("baixet-novatos");
-    descobertsRecipes.add("alcohol-secta");
-    descobertsRecipes.add("profe-risas");
-    descobertsRecipes.add("examen-risas");
-    descobertsRecipes.add("jocdalgorismia-secta");
-    descobertsRecipes.add("mates-risas");
-    descobertsRecipes.add("novatos-premi");
-    descobertsRecipes.add("novatorevelacio-tercer");
-    descobertsRecipes.add("elegant-secta");
-    descobertsRecipes.add("novatos-salseo");
-    descobertsRecipes.add("novatorevelacio-segon");
-    descobertsRecipes.add("novatorevelacio-novatos");
-    descobertsRecipes.add("novatorevelacio-quart");
-    descobertsRecipes.add("drama-mates");
-    descobertsRecipes.add("festa-novatos");
-    descobertsRecipes.add("festa-recu");
-    descobertsRecipes.add("cuqui-festa");
-    descobertsRecipes.add("festahawaiana-jaumefranch");
-    descobertsRecipes.add("festa-gespeta");
-    descobertsRecipes.add("porros-risas");
-    descobertsRecipes.add("numerica-profe");
-    descobertsRecipes.add("edps-profe");
-    descobertsRecipes.add("amor-amor");
-    descobertsRecipes.add("brisca-pacs");
-    descobertsRecipes.add("recu-recu");
-    descobertsRecipes.add("mates-tonto");
-    descobertsRecipes.add("brisca-dades");
-    descobertsRecipes.add("brisca-risas");
-    descobertsRecipes.add("dades-secta");
-    descobertsRecipes.add("andreuhuguet-sortida");
-    descobertsRecipes.add("andreuhuguet-leonsito");
-    descobertsRecipes.add("elegant-pibuti");
-    descobertsRecipes.add("dele-dele");
-    descobertsRecipes.add("cuqui-ivetacosta");
-    descobertsRecipes.add("novatos-risas");
-    descobertsRecipes.add("joc-novatos");
-    descobertsRecipes.add("festadenovatos-salseo");
-    descobertsRecipes.add("gabrialujas-sortida");
-    descobertsRecipes.add("lauraarribas-risas");
-    descobertsRecipes.add("fmemes00-novatos");
-    descobertsRecipes.add("fmemes00-tercer");
-    descobertsRecipes.add("festa-tercer");
-    descobertsRecipes.add("festa-upc");
-    descobertsRecipes.add("cfis-profe");
-    descobertsRecipes.add("examen-jordicivit");
-    descobertsRecipes.add("examen-ivetacosta");
-    descobertsRecipes.add("edupena-examen");
-    descobertsRecipes.add("cinque-mates");
-    descobertsRecipes.add("dele-iaio");
-    descobertsRecipes.add("drama-risas");
-    descobertsRecipes.add("cuqui-teatrefme");
-    descobertsRecipes.add("festa-teatrefme");
-    descobertsRecipes.add("tonto-tonto");
-    descobertsRecipes.add("terrassa-tonto");
-    descobertsRecipes.add("palomo-segon");
-    descobertsRecipes.add("palomo-tercer");
-    descobertsRecipes.add("palomo-quart");
-    descobertsRecipes.add("dormir-lavabocfis");
-    descobertsRecipes.add("cuqui-novatos");
-    descobertsRecipes.add("novatos-novatos");
-    descobertsRecipes.add("segon-segon");
-    descobertsRecipes.add("tercer-tercer");
-    descobertsRecipes.add("quart-quart");
-    descobertsRecipes.add("cfis-salseo");
-    descobertsRecipes.add("lauraarribas-lavabocfis");
-    descobertsRecipes.add("festa-picatrencada");
-    descobertsRecipes.add("festa-festa");
-    descobertsRecipes.add("fme-tonto");
-    descobertsRecipes.add("cfis-iaio");
-    descobertsRecipes.add("info-risas");
-    descobertsRecipes.add("amor-andreuhuguet");
-    descobertsRecipes.add("drama-tiracanyes");
-    descobertsRecipes.add("cinque-cobra");
-    descobertsRecipes.add("quart-tercer");
-    descobertsRecipes.add("drama-lio");
-    descobertsRecipes.add("secta-secta");
-    descobertsRecipes.add("risas-risas");
-    descobertsRecipes.add("barsanjuan-joc");
-    descobertsRecipes.add("cfis-joc");
-    descobertsRecipes.add("dele-joc");
-    descobertsRecipes.add("edgarmoreno-jaumefranch");
-    descobertsRecipes.add("dele-esport");
-    descobertsRecipes.add("info-joc");
-    descobertsRecipes.add("cfis-roura");
-    descobertsRecipes.add("cfis-rouritos");
-    descobertsRecipes.add("luisdelbar-menjar");
-    descobertsRecipes.add("menjar-rubendelbar");
-    descobertsRecipes.add("barsanjuan-menjar");
-    descobertsRecipes.add("brisca-escacs");
-    descobertsRecipes.add("andreuhuguet-samucapellas");
-    descobertsRecipes.add("festa-temaso");
-    descobertsRecipes.add("secta-volum");
-    descobertsRecipes.add("danimunoz-volum");
-    descobertsRecipes.add("novatos-temaso");
-    descobertsRecipes.add("cinque-risas");
-    descobertsRecipes.add("alcohol-janafarran");
-    descobertsRecipes.add("jordicondom-tonto");
-    descobertsRecipes.add("rosa-secta");
-    descobertsRecipes.add("albertjimenez-tonto");
-    descobertsRecipes.add("cadenaderoba-secta");
-    descobertsRecipes.add("examen-examen");
-    descobertsRecipes.add("biblio-brisca");
-    descobertsRecipes.add("cinque-dormir");
-    descobertsRecipes.add("festa-menjar");
-    descobertsRecipes.add("fme-risas");
-    descobertsRecipes.add("iaio-pikipiki");
-    descobertsRecipes.add("info-secta");
-    descobertsRecipes.add("festagran-gespeta");
-    descobertsRecipes.add("gespeta-joc");
-    descobertsRecipes.add("fme-joc");
-    descobertsRecipes.add("mariaprat-mortissim");
-    descobertsRecipes.add("javilopezcontreras-mortissim");
-    descobertsRecipes.add("marionasanchez-mortissim");
-    descobertsRecipes.add("mortissim-xino");
-    descobertsRecipes.add("davidariza-mortissim");
-    descobertsRecipes.add("amaliasimon-mortissim");
-    descobertsRecipes.add("marcesquerra-mortissim");
-    descobertsRecipes.add("mortissim-verapujadas");
-    descobertsRecipes.add("albertgimo-mortissim");
-    descobertsRecipes.add("lauraarribas-mortissim");
-    descobertsRecipes.add("dunatomas-mortissim");
-    descobertsRecipes.add("edupena-mortissim");
-    descobertsRecipes.add("edgarmoreno-mortissim");
-    descobertsRecipes.add("mortissim-silviagarcia");
-    descobertsRecipes.add("danivilardell-mortissim");
-    descobertsRecipes.add("amandasanjuan-mortissim");
-    descobertsRecipes.add("maxruiz-mortissim");
-    descobertsRecipes.add("carlotagracia-mortissim");
-    descobertsRecipes.add("jordibosch-mortissim");
-    descobertsRecipes.add("martinacolas-mortissim");
-    descobertsRecipes.add("fme-perrofla");
-    descobertsRecipes.add("assemblea-novatos");
-    descobertsRecipes.add("examen-np");
-    descobertsRecipes.add("conjuntbuit-festa");
-    descobertsRecipes.add("conjuntbuit-joc");
-    descobertsRecipes.add("iaio-pingpong");
-    descobertsRecipes.add("brisca-pingpong");
-    descobertsRecipes.add("carlotacorrales-k9");
-    descobertsRecipes.add("jordicivit-k9");
-    descobertsRecipes.add("k9-xino");
-    descobertsRecipes.add("davidariza-k9");
-    descobertsRecipes.add("birres-novatades");
-    descobertsRecipes.add("festa-novatades");
-    descobertsRecipes.add("estadistics-gespeta");
-    descobertsRecipes.add("cinque-graf");
-    descobertsRecipes.add("martinacolas-novatos");
-    descobertsRecipes.add("andreuboix-josepfontana");
-    descobertsRecipes.add("birres-brisca");
-    descobertsRecipes.add("brisca-lomoqueso");
-    descobertsRecipes.add("laiapomar-olgamartinez");
-    descobertsRecipes.add("festa-lamari");
-    descobertsRecipes.add("catan-quart");
-    descobertsRecipes.add("rubendelbar-tupper");
-    descobertsRecipes.add("enaitzquilez-sortida");
-    descobertsRecipes.add("erikferrando-xino");
-    descobertsRecipes.add("annafelip-plattrencat");
-    descobertsRecipes.add("cfis-edusimon");
-    descobertsRecipes.add("jordicivit-novatos");
-    descobertsRecipes.add("novatos-numerica");
-    descobertsRecipes.add("joc-numerica");
-    descobertsRecipes.add("festahawaiana-premi");
-    descobertsRecipes.add("cubatada-ivetacosta");
-    descobertsRecipes.add("ainaazkargorta-lio");
-    descobertsRecipes.add("alexaibar-amor");
-    descobertsRecipes.add("heredia-maripaz");
+    elements.forEach((String s, MyElement e) {
+      descoberts.add(s);
+    });
+    recipes.forEach((String s, Recipe e) {
+      descobertsRecipes.add(s);
+    });
   }
 }
