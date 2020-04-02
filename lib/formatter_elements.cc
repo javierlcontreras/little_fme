@@ -24,8 +24,9 @@ int main() {
 		// MyElement erik = MyElement("anna", "Erik Ferrando", "Novato");
     	// elements["ivet"] = ivet;
     
-		cout << "MyElement " << id << " = MyElement(this, \"" << id << "\", \"" << nom << "\", \"" << desc << "\");" << endl;  
-		cout << "elements[\"" << id << "\"] = " << id << ";" << endl;
+		//cout << "MyElement " << id << " = MyElement(this, \"" << id << "\", \"" << nom << "\", \"" << desc << "\");" << endl;  
+		//cout << "elements[\"" << id << "\"] = " << id << ";" << endl;
+		cout << "descoberts.add(\"" << id << "\");" << endl;
 	}
 }
 

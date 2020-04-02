@@ -23,6 +23,7 @@ int main() {
 			}
 		}
 		if (m1 > m2) swap(m1, m2);
-		cout << "recipes[\"" << m1 << "-" << m2 << "\"] = Recipe(this, \"" << id << "\", " << m1 << ", " << m2 << ", " << pr << ");" << endl;
+		//cout << "recipes[\"" << m1 << "-" << m2 << "\"] = Recipe(this, \"" << id << "\", " << m1 << ", " << m2 << ", " << pr << ");" << endl;
+		cout << "descobertsRecipes.add(\"" << m1 << "-" << m2 << "\");" << endl;
 	}
 }

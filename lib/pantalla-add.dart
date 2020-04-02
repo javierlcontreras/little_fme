@@ -46,6 +46,17 @@ class PantallaAdd {
         game.pad, game.pad, game.screenSize.width - 2 * game.pad, 4*game.pad);
     canvas.drawRect(bgRect, bgPaint);
 
+    bgRect = Rect.fromLTWH(
+        game.pad, game.screenSize.height - 2*game.pad, game.screenSize.width - 2 * game.pad, game.pad);
+    canvas.drawRect(bgRect, bgPaint);
+
+    Paint bgPaint2 = Paint();
+    bgPaint2.color = Color(game.mixColor);
+    bgRect = Rect.fromLTWH(
+        game.pad, game.screenSize.height - game.pad, game.screenSize.width - 2 * game.pad, game.pad);
+    canvas.drawRect(bgRect, bgPaint2);
+
+
     TextSpan span = new TextSpan(
         style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
         text: game.descoberts.length.toString() + "/" + game.elements.length.toString() + " elements descoberts");
