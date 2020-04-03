@@ -37,7 +37,8 @@ class PantallaDetails {
         2*game.pad, 2*game.pad, game.screenSize.width - 4 * game.pad, game.screenSize.height - 4 * game.pad);
     Paint bgPaint = Paint();
     bgPaint.color = Color(0xffeeeeee);
-    canvas.drawRect(bgRect, bgPaint);
+    RRect bgRRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(bgRRect, bgPaint);
 
     final icon = Icons.close;
     TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);

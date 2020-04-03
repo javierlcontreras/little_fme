@@ -80,7 +80,7 @@ class MyGame extends Game {
     scrollDetails = 0;
     scrollLast = 0;
 
-    mixColor = 0xffAAD3FF;
+    mixColor = 0xffc9e3ff;
     pantalla = "inicial";
 
     elements = Map<String, MyElement>();
@@ -101,7 +101,7 @@ class MyGame extends Game {
     // TODO uncomment reads to not restart game every time
 
     afegirDades();
-    //cheat();
+    cheat();
 
     propagarGastades();
     propagarDescobertsRecipes();

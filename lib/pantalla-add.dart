@@ -36,7 +36,8 @@ class PantallaAdd {
         game.pad, game.pad, game.screenSize.width - 2 * game.pad, game.screenSize.height - 2*game.pad);
     Paint bgPaint = Paint();
     bgPaint.color = Color(0xffffffff);
-    canvas.drawRect(bgRect, bgPaint);
+    RRect roundedRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(roundedRect, bgPaint);
 
     game.descoberts?.forEach((String nom) {
       game.elements[nom].render(canvas);
@@ -44,17 +45,21 @@ class PantallaAdd {
 
     bgRect = Rect.fromLTWH(
         game.pad, game.pad, game.screenSize.width - 2 * game.pad, 5*game.pad);
-    canvas.drawRect(bgRect, bgPaint);
+    roundedRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(roundedRect, bgPaint);
 
     bgRect = Rect.fromLTWH(
-        game.pad, game.screenSize.height - 2*game.pad, game.screenSize.width - 2 * game.pad, game.pad);
-    canvas.drawRect(bgRect, bgPaint);
+        2.5*game.pad, game.screenSize.height - 2*game.pad, game.screenSize.width - 5 * game.pad, game.pad);
+    roundedRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(roundedRect, bgPaint);
+
 
     Paint bgPaint2 = Paint();
     bgPaint2.color = Color(game.mixColor);
     bgRect = Rect.fromLTWH(
         game.pad, game.screenSize.height - game.pad, game.screenSize.width - 2 * game.pad, game.pad);
-    canvas.drawRect(bgRect, bgPaint2);
+    roundedRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(roundedRect, bgPaint2);
 
 
     TextSpan span = new TextSpan(
@@ -64,7 +69,7 @@ class PantallaAdd {
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
     tp.layout();
-    tp.paint(canvas, new Offset(2*game.pad, 2*game.pad));
+    tp.paint(canvas, new Offset(3*game.pad, 2*game.pad));
 
     span = new TextSpan(
         style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
@@ -73,7 +78,7 @@ class PantallaAdd {
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
     tp.layout();
-    tp.paint(canvas, new Offset(2*game.pad, 2*game.pad + 3/2*game.pad));
+    tp.paint(canvas, new Offset(3*game.pad, 2*game.pad + 3/2*game.pad));
 
     drawCloseButton(canvas);
   }
@@ -88,6 +93,6 @@ class PantallaAdd {
     textPainter.text = TextSpan(text: String.fromCharCode(icon.codePoint),
         style: TextStyle(fontSize: 2*game.pad-2,fontFamily: icon.fontFamily, color: Color(0xff000000)));
     textPainter.layout();
-    textPainter.paint(canvas, Offset(game.screenSize.width - 4 * game.pad - 1, 2*game.pad + 1));
+    textPainter.paint(canvas, Offset(game.screenSize.width - 4 * game.pad - 1.5, 2*game.pad + 1));
   }
 }
