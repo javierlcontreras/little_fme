@@ -103,20 +103,25 @@ class MyGame extends Game {
     afegirDades();
     //cheat();
 
+    contaReceptesPerElement();
     propagarGastades();
     propagarDescobertsRecipes();
     recalcPosDescoberts();
   }
 
-  void propagarGastades() {
+  void contaReceptesPerElement() {
     recipes.forEach((String id, Recipe r) {
       r.p.maxr++;
+    });
+  }
+
+  void propagarGastades() {
+    recipes.forEach((String id, Recipe r) {
       if (!descobertsRecipes.contains(id)) {
         r.m1.mort = false;
         r.m2.mort = false;
       }
     });
-
   }
 
   void propagarDescobertsRecipes() {
@@ -264,20 +269,24 @@ class MyGame extends Game {
       }
       String P = M1 + "-" + M2;
       if (recipes.containsKey(P)) {
-        recipes[P].discoverRecipe();
 
-        descobertsRecipes.add(P);
-        saveDescobertsRecipes();
-        iconas.add(Icona(this, best.x, best.y, recipes[P].p));
-        if (!descoberts.contains(recipes[P].p.id)) {
-          descoberts.add(recipes[P].p.id);
-          saveDescoberts();
-          recalcPosDescoberts();
+        if (!descobertsRecipes.contains(P)) {
+          recipes[P].discoverRecipe();
+          descobertsRecipes.add(P);
+          saveDescobertsRecipes();
           pantalla = "details";
           detailsShow = elements[recipes[P].p.id];
+          if (!descoberts.contains(recipes[P].p.id)) {
+            descoberts.add(recipes[P].p.id);
+            saveDescoberts();
+            recalcPosDescoberts();
+          }
+          propagarGastades();
         }
+        iconas.add(Icona(this, best.x, best.y, recipes[P].p));
         iconas.remove(holding);
         iconas.remove(best);
+
       }
       holding = null;
     }
