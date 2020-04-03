@@ -35,6 +35,7 @@ class PantallaMix {
     bgPaint.color = Color(game.mixColor);
     canvas.drawRect(bgRect, bgPaint);
 
+
     game.iconas?.forEach((Icona ic) => ic.render(canvas));
 
     Paint _black = Paint()
@@ -49,7 +50,7 @@ class PantallaMix {
       final icon = Icons.add_circle;
       TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
       textPainter.text = TextSpan(text: String.fromCharCode(icon.codePoint),
-          style: TextStyle(fontSize: 2*(game.tile - game.pad),fontFamily: icon.fontFamily, color: Color(0xff5DAF53)));
+          style: TextStyle(fontSize: 2*(game.tile - game.pad),fontFamily: icon.fontFamily, color: Color(0xff3dc151)));
       textPainter.layout();
       textPainter.paint(canvas, Offset(game.screenSize.width - game.tile - (game.tile - game.pad), game.screenSize.height - 2*game.tile + game.pad));
       /*
