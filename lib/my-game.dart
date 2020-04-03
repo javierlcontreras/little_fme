@@ -30,16 +30,18 @@ double dist(double x1, double y1, double x2, double y2) {
 class MyGame extends Game {
   final SharedPreferences storage;
   Size screenSize;
+  Size lastSize;
 
   int n;
   double tile, smalltile, bigtile, recipetile;
   double pad;
 
   double scroll;
+  double scrollVel;
   double scrollDetails;
   double scrollInit;
   double scrollLast;
-  double scrollMax = 1000;
+  double scrollMax;
   double startY, endY;
 
   String pantalla; //mix, add, details
@@ -65,18 +67,11 @@ class MyGame extends Game {
 
   void initialize() async {
     resize(await Flame.util.initialDimensions());
+    updateMesures();
 
-    tile = screenSize.width/8;
-    n = 4;
-    pad = tile/3;
-    smalltile = (screenSize.width - (n+5)*pad)/n;
-    bigtile = screenSize.height/2 - 12*pad;
-    recipetile = (screenSize.height - bigtile - 15*pad - 7*pad)/3;
-
-    startY = pad;
-    endY = screenSize.height - pad;
     scrollInit = -1;
     scroll = 0;
+    scrollVel = 0;
     scrollDetails = 0;
     scrollLast = 0;
 
@@ -116,6 +111,9 @@ class MyGame extends Game {
   }
 
   void propagarGastades() {
+    elements.forEach((String id, MyElement e) {
+      e.mort = true;
+    });
     recipes.forEach((String id, Recipe r) {
       if (!descobertsRecipes.contains(id)) {
         r.m1.mort = false;
@@ -169,22 +167,22 @@ class MyGame extends Game {
   }
 
   void render(Canvas canvas) {
-    mix.render(canvas);
+    Rect bgRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
+    Paint bgPaint = Paint();
+    //bgPaint.color = Color(0xff576574);
+    bgPaint.color = Color(mixColor);
+    canvas.drawRect(bgRect, bgPaint);
+
     if (pantalla == "inicial") inicial.render(canvas);
-    if (pantalla == "add" || pantalla == "details") {
-      add.render(canvas);
-    }
-    if (pantalla == "details") {
-      details.render(canvas);
-    }
+    else if (pantalla == "mix") mix.render(canvas);
+    else if (pantalla == "add") add.render(canvas);
+    else if (pantalla == "details") details.render(canvas);
   }
 
   // GESTURES
   void onPanStart(DragStartDetails d) {
-    if (pantalla == "inicial") {
-      pantalla = "mix";
-      return;
-    }
+    scrollVel = 0;
+
     double x = d.globalPosition.dx;
     double y = d.globalPosition.dy;
     if (pantalla == "mix") {
@@ -292,17 +290,30 @@ class MyGame extends Game {
     }
     else if (pantalla == "add") {
       scrollInit = -1;
+      scrollVel = d.velocity.pixelsPerSecond.dy;
     }
   }
   void onTapDown(TapDownDetails d) {
+    scrollVel = 0;
+
+    double x = d.globalPosition.dx;
+    double y = d.globalPosition.dy;
     if (pantalla == "inicial") {
-      pantalla = "mix";
-      return;
+      if (
+          screenSize.width/2 - 2*tile <= x &&
+          screenSize.width/2 + 2*tile >= x &&
+          0.65*screenSize.height - tile <= y &&
+          0.65*screenSize.height + tile >= y
+      ) {
+        pantalla = "mix";
+        return;
+      }
     }
   }
   void onTapUp(TapUpDetails d) {
     double x = d.globalPosition.dx;
     double y = d.globalPosition.dy;
+
     if (pantalla == "mix") {
       double r = tile;
       if (dist(x, y, screenSize.width - tile, screenSize.height - tile) < r) {
@@ -344,12 +355,32 @@ class MyGame extends Game {
 
   }
 
-  // USELESS
   void resize(Size size) {
     screenSize = size;
   }
+  void updateMesures() {
+    tile = min(screenSize.width/8,screenSize.height/8);
+    n = (screenSize.width/(2*tile)).floor();
+    pad = 20;
+    smalltile = (screenSize.width - (n+5)*pad)/n;
+    bigtile = min(screenSize.width/2, screenSize.height/4);
+    recipetile = (screenSize.height - bigtile - 15*pad - 7*pad)/3;
+
+    startY = pad;
+    endY = screenSize.height - pad;
+  }
   void update(double t) {
 
+    if (lastSize != screenSize) {
+      updateMesures();
+      recalcPosDescoberts();
+    }
+    lastSize = screenSize;
+
+    scroll -= scrollVel/15;
+    if (scroll > scrollMax) scroll = scrollMax;
+    if (scroll < 0) scroll = 0;
+    scrollVel /= 1.15;
   }
 
   // MACHINE GENERATED CODE

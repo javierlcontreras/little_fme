@@ -50,31 +50,38 @@ class PantallaInicial {
     tp = new TextPainter(text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
     tp.layout(minWidth: game.screenSize.width - 2 * game.pad);
-    tp.paint(canvas, new Offset(game.pad, 0.4*game.screenSize.height));
+    tp.paint(canvas, new Offset(game.pad, game.screenSize.height/4 + game.tile +  3*game.pad));
+
+
 
     Rect playRect = Rect.fromLTWH(
-        game.screenSize.width/2 - 2*game.tile, 0.65*game.screenSize.height - game.tile, 4*game.tile, 2*game.tile);
+        game.screenSize.width/2 - 2*game.tile,
+        game.screenSize.height/4 + game.tile +  8*game.pad,
+        4*game.tile,
+        2*game.tile);
     RRect playRRect = RRect.fromRectAndRadius(playRect, Radius.circular(2*game.pad));
     Paint playPaint = Paint();
     playPaint.color = Color(0xffffffff);
     canvas.drawRRect(playRRect, playPaint);
 
-
     playRect = Rect.fromLTWH(
-        game.screenSize.width/2 - 2*game.tile + 0.75*game.pad, 0.65*game.screenSize.height - game.tile + 0.75*game.pad, 4*game.tile - 1.5*game.pad, 2*game.tile - 1.5*game.pad);
+        game.screenSize.width/2 - 2*game.tile + 0.75*game.pad,
+        game.screenSize.height/4 + game.tile +  8*game.pad + 0.75*game.pad,
+        4*game.tile - 1.5*game.pad,
+        2*game.tile - 1.5*game.pad);
     playRRect = RRect.fromRectAndRadius(playRect, Radius.circular(game.pad));
     playPaint = Paint();
+
     playPaint.color = Color(0xffc9e3ff);
     canvas.drawRRect(playRRect, playPaint);
 
-
     span = new TextSpan(
-        style: new TextStyle(fontSize: 2*game.tile - 3*game.pad, color: Color(0xff4c80b9), fontFamily: 'TitleFont'),
+        style: new TextStyle(fontSize: 1.6*game.tile - 2*game.pad, color: Color(0xff4c80b9), fontFamily: 'TitleFont'),
         text: 'Jugar!');
     tp = new TextPainter(text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
-    tp.layout(minWidth: game.screenSize.width - 2 * game.pad);
-    tp.paint(canvas, new Offset(game.pad, 0.65*game.screenSize.height - game.tile + 0.75*game.pad));
+    tp.layout(minWidth: game.screenSize.width);
+    tp.paint(canvas, new Offset(0, game.screenSize.height/4 + 0.8*game.tile + 9.5*game.pad));
 
 
   }

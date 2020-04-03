@@ -28,14 +28,6 @@ class PantallaMix {
   PantallaMix(this.game) {}
 
   void render(Canvas canvas) {
-
-    Rect bgRect = Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height);
-    Paint bgPaint = Paint();
-    //bgPaint.color = Color(0xff576574);
-    bgPaint.color = Color(game.mixColor);
-    canvas.drawRect(bgRect, bgPaint);
-
-
     game.iconas?.forEach((Icona ic) => ic.render(canvas));
 
     Paint _black = Paint()

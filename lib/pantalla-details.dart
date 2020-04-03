@@ -28,14 +28,22 @@ class PantallaDetails {
   PantallaDetails(this.game) {}
 
   void render(Canvas canvas) {
+    Rect bgRect = Rect.fromLTWH(
+        game.pad, game.pad, game.screenSize.width - 2 * game.pad, game.screenSize.height - 2*game.pad);
+    Paint bgPaint = Paint();
+    bgPaint.color = Color(0xffffffff);
+    RRect roundedRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
+    canvas.drawRRect(roundedRect, bgPaint);
+
+
     Paint _black = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    Rect bgRect = Rect.fromLTWH(
+    bgRect = Rect.fromLTWH(
         2*game.pad, 2*game.pad, game.screenSize.width - 4 * game.pad, game.screenSize.height - 4 * game.pad);
-    Paint bgPaint = Paint();
+    bgPaint = Paint();
     bgPaint.color = Color(0xffeeeeee);
     RRect bgRRect = RRect.fromRectAndRadius(bgRect, Radius.circular(2*game.pad));
     canvas.drawRRect(bgRRect, bgPaint);

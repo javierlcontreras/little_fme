@@ -12,6 +12,7 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components/component.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,10 @@ main() async {
   dragger.onUpdate = game.onPanUpdate;
   dragger.onEnd = game.onPanEnd;
 
+  if (!kIsWeb) {
+    await Flame.util.setPortrait();
+    await Flame.util.fullScreen();
+  }
   runApp(game.widget);
 
   flameUtil.addGestureRecognizer(dragger);
