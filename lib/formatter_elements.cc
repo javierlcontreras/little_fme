@@ -3,6 +3,7 @@ using namespace std;
 
 int main() {
 	string line;
+	string best;
 	while (getline(cin, line)) {
 		int n = line.size();
 		int p = -1;
@@ -24,9 +25,12 @@ int main() {
 		// MyElement erik = MyElement("anna", "Erik Ferrando", "Novato");
     	// elements["ivet"] = ivet;
     
-		//cout << "MyElement " << id << " = MyElement(this, \"" << id << "\", \"" << nom << "\", \"" << desc << "\");" << endl;  
-		//cout << "elements[\"" << id << "\"] = " << id << ";" << endl;
-		cout << "descoberts.add(\"" << id << "\");" << endl;
+	//	cout << "MyElement " << id << " = MyElement(this, \"" << id << "\", \"" << nom << "\", \"" << desc << "\");" << endl;  
+	//	cout << "elements[\"" << id << "\"] = " << id << ";" << endl;
+	//	cout << "descoberts.add(\"" << id << "\");" << endl;
+		if (nom.size() > best.size()) {
+			cout << (best = nom) << endl;
+		}
 	}
 }
 

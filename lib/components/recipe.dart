@@ -38,7 +38,7 @@ class Recipe {
   
   void showRecipe(double y, Canvas canvas) {
     Rect bgRect = Rect.fromLTWH(
-      3*game.pad,
+      game.screenSize.width/4 - game.recipetile/2,
       y,
       game.recipetile,
       game.recipetile,
@@ -52,9 +52,9 @@ class Recipe {
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
     tp.layout(minWidth: game.recipetile);
-    tp.paint(canvas, new Offset(3*game.pad, y + game.recipetile + game.pad/2));
+    tp.paint(canvas, new Offset(game.screenSize.width/4 - game.recipetile/2, y + game.recipetile + game.pad/6));
   
-    double xplus = (3*game.pad + game.screenSize.width/2 - game.recipetile/2)/2 + game.recipetile/2;
+    double xplus = 3/8*game.screenSize.width;
     span = new TextSpan(
       style: new TextStyle(fontSize: 2*game.pad, color: Color(0xff000000)),
       text: "+");
@@ -62,7 +62,7 @@ class Recipe {
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
     tp.layout();
-    tp.paint(canvas, new Offset(xplus - 3*game.pad/4, y + game.recipetile/2 - game.pad));
+    tp.paint(canvas, new Offset(xplus - 0.8*game.pad, y + game.recipetile/2 - game.pad));
   
   
     bgRect = Rect.fromLTWH(
@@ -80,10 +80,9 @@ class Recipe {
       textDirection: TextDirection.ltr);
     tp.layout(minWidth: game.recipetile);
     tp.paint(canvas, new Offset(game.screenSize.width/2 - game.recipetile/2,
-              y + game.recipetile + game.pad/2));
+              y + game.recipetile + game.pad/6));
   
-    double xeq = (game.screenSize.width - game.recipetile - 3*game.pad
-                    + game.screenSize.width/2 - game.recipetile/2)/2 + game.recipetile/2;
+    double xeq = 5/8*game.screenSize.width;
     span = new TextSpan(
       style: new TextStyle(fontSize: 2*game.pad, color: Color(0xff000000)),
       text: "=");
@@ -91,10 +90,10 @@ class Recipe {
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
     tp.layout();
-    tp.paint(canvas, new Offset(xeq - game.pad, y + game.recipetile/2 - game.pad));
+    tp.paint(canvas, new Offset(xeq - 0.6*game.pad, y + game.recipetile/2 - game.pad));
   
     bgRect = Rect.fromLTWH(
-      game.screenSize.width - game.recipetile - 3*game.pad,
+      3/4*game.screenSize.width - game.recipetile/2,
       y,
       game.recipetile,
       game.recipetile,
@@ -107,8 +106,8 @@ class Recipe {
       text: span, textAlign: TextAlign.center,
       textDirection: TextDirection.ltr);
     tp.layout(minWidth: game.recipetile);
-    tp.paint(canvas, new Offset(game.screenSize.width - game.recipetile - 3*game.pad,
-                y + game.recipetile + game.pad/2));
+    tp.paint(canvas, new Offset(3/4*game.screenSize.width - game.recipetile/2,
+                y + game.recipetile + game.pad/6));
   }
   void discoverRecipe() {
     MyElement prod = p;

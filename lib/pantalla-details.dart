@@ -57,7 +57,7 @@ class PantallaDetails {
 
     bgRect = Rect.fromLTWH(
       game.screenSize.width/2 - game.bigtile/2,
-      6*game.pad,
+      5*game.pad,
       game.bigtile,
       game.bigtile,
     );
@@ -68,9 +68,10 @@ class PantallaDetails {
         text: game.detailsShow.name + (game.detailsShow.mort ? " \u2713" : ""));
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr);
-    tp.layout(minWidth: game.screenSize.width - 4 * game.pad);
-    tp.paint(canvas, new Offset(2*game.pad, 6*game.pad + game.bigtile + 1*game.pad));
+        textDirection: TextDirection.ltr,
+        maxLines: 1);
+    tp.layout(minWidth: game.screenSize.width - 4 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
+    tp.paint(canvas, new Offset(2*game.pad, 6*game.pad + game.bigtile));
 
 
     span = new TextSpan(
@@ -79,9 +80,9 @@ class PantallaDetails {
     tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
-        maxLines: 10);
+        maxLines: 2);
     tp.layout(minWidth: game.screenSize.width - 6 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
-    tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 4*game.pad));
+    tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 3*game.pad));
 
     String txt = game.detailsShow.countr().toString() + "/" + game.detailsShow.maxr.toString() + " receptes descobertes";
     if (game.detailsShow.maxr == 0) txt = "Aquest element és bàsic";
@@ -91,19 +92,19 @@ class PantallaDetails {
     tp = new TextPainter(
         text: span, textAlign: TextAlign.left,
         textDirection: TextDirection.ltr,
-        maxLines: 10);
+        maxLines: 1);
     tp.layout(minWidth: game.screenSize.width - 6 * game.pad, maxWidth: game.screenSize.width - 6 * game.pad);
-    tp.paint(canvas, new Offset(3*game.pad, 6*game.pad + game.bigtile + 7*game.pad));
+    tp.paint(canvas, new Offset(3*game.pad, game.screenSize.height/2 + game.pad));
 
 
     if (game.detailsShow.A != null) {
-      game.detailsShow.A.showRecipe(game.bigtile + 15*game.pad, canvas);
+      game.detailsShow.A.showRecipe(game.screenSize.height/2 + 3*game.pad, canvas);
     }
     if (game.detailsShow.B != null) {
-      game.detailsShow.B.showRecipe(game.bigtile + 16.5*game.pad + game.recipetile, canvas);
+      game.detailsShow.B.showRecipe(game.screenSize.height/2 + 4*game.pad + game.recipetile, canvas);
     }
     if (game.detailsShow.C != null) {
-      game.detailsShow.C.showRecipe(game.bigtile + 18*game.pad + 2*game.recipetile, canvas);
+      game.detailsShow.C.showRecipe(game.screenSize.height/2 + 5*game.pad + 2*game.recipetile, canvas);
     }
   }
 }

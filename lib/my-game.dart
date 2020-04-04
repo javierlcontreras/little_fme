@@ -359,18 +359,19 @@ class MyGame extends Game {
     screenSize = size;
   }
   void updateMesures() {
-    tile = min(screenSize.width/8,screenSize.height/8);
-    n = (screenSize.width/(2*tile)).floor();
-    pad = 20;
+    tile = 60;
+    pad = 14;
+    n = ((screenSize.width - 5*pad)/(tile + pad)).floor();
     smalltile = (screenSize.width - (n+5)*pad)/n;
-    bigtile = min(screenSize.width/2, screenSize.height/4);
-    recipetile = (screenSize.height - bigtile - 15*pad - 7*pad)/3;
+    tile = smalltile;
+
+    bigtile = min(screenSize.width - 6*pad, screenSize.height/2 - 11*pad);
+    recipetile = min((screenSize.height/2 - 8*pad)/3, (screenSize.width - 10*pad)/3);
 
     startY = pad;
     endY = screenSize.height - pad;
   }
   void update(double t) {
-
     if (lastSize != screenSize) {
       updateMesures();
       recalcPosDescoberts();
@@ -531,7 +532,7 @@ class MyGame extends Game {
     elements["picatrencada"] = picatrencada;
     MyElement perrofla = MyElement(this, "perrofla", "Perrofla", "Rinyo i rastess");
     elements["perrofla"] = perrofla;
-    MyElement jordicondom = MyElement(this, "jordicondom", "Condom", "Burro");
+    MyElement jordicondom = MyElement(this, "jordicondom", "Jordi Condom", "Burro");
     elements["jordicondom"] = jordicondom;
     MyElement xino = MyElement(this, "xino", "Xino", "Esquereeeee");
     elements["xino"] = xino;
@@ -1025,7 +1026,6 @@ class MyGame extends Game {
     descoberts.add("salseo");
     descoberts.add("risas");
   }
-
   void cheat() {
     descoberts.clear();
     descobertsRecipes.clear();

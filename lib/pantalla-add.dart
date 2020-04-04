@@ -64,7 +64,7 @@ class PantallaAdd {
 
     TextSpan span = new TextSpan(
         style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
-        text: game.descoberts.length.toString() + "/" + game.elements.length.toString() + " elements descoberts");
+        text: game.descoberts.length.toString() + "/" + game.elements.length.toString() + " elements");
     TextPainter tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
@@ -73,7 +73,7 @@ class PantallaAdd {
 
     span = new TextSpan(
         style: new TextStyle(fontSize: game.pad, color: Color(0xff000000)),
-        text: game.descobertsRecipes.length.toString() + "/" + game.recipes.length.toString() + " receptes descobertes");
+        text: game.descobertsRecipes.length.toString() + "/" + game.recipes.length.toString() + " receptes");
     tp = new TextPainter(
         text: span, textAlign: TextAlign.center,
         textDirection: TextDirection.ltr);
